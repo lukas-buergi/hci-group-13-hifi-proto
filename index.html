@@ -1,1 +1,63 @@
-<h1>Hello World</h1>
+<!DOCTYPE html>
+<html>
+<head>
+<!-- Bootstrap -->
+    <link   rel="stylesheet" 
+            href="https://stackpath.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css"
+            integrity="sha384-HSMxcRTRxnN+Bdg0JdbxYKrThecOKuH5zCYotlSAcp1+c8xmyTe9GYg1l9a69psu"
+            crossorigin="anonymous">
+<!-- Internal CSS -->
+    <style>
+        body {  background-color: #F0F8FA;}
+        h1   {  color: black;
+                font-family: Helvetica;
+                font-size: small;
+                text-align: center;}
+        h2   {  color: black;
+                font-family: Helvetica;
+                font-size: x-small;
+                text-align: center;}
+        p    {  color: black;
+                font-family: Helvetica;}
+        div  {  text-align: center;
+                padding: 4px;
+                margin-top: 4px;}
+        .row {  align-items: center;}
+        .responsive {       width: 100%;
+                            height: auto;}
+        .picture-frame {    float: right;
+                            align-items: center;}
+        .container-fluid {  text-align: center;
+                            align-items: center;
+                            display: flex;
+                            flex-wrap: wrap;
+                            justify-content: space-evenly;}
+    </style>
+</head>
+<body>
+    <div class="container-fluid">
+        <div class="row">
+            <div class="col-lg-8 col-sm-12">
+                <img src=images/p1_fantasia.png alt="Page 1" class="responsive">
+            </div>
+            <picture class="col-sm-12 col-lg-4 picture-frame">
+                <div class="col-sm-6 col-lg-12">
+                    <img src=images/placekitten_500x210.png alt="Person 1" class="responsive">
+                </div>
+                <div class="col-sm-6 col-lg-12">
+                    <img src=images/placekitten_500x210.png alt="Person 2" class="responsive">
+                </div>
+                <div class="col-sm-6 col-lg-12">
+                <img src=images/placekitten_500x210.png alt="Person 3" class="responsive">
+                </div>
+                <div class="col-sm-6 col-lg-12">
+                    <img src=images/placekitten_500x210.png alt="Person 4" class="responsive">
+                </div>
+            </picture>
+            <div class="col-lg-8 col-sm-12">
+                <img src=images/p2_fantasia.png alt="Page 2" class="responsive">
+            </div>
+        </div>
+    </div>
+</body>
+</html>
