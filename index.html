@@ -60,7 +60,9 @@
         </div>
     </div>
     <script src="webgazer.js" type="text/javascript" ></script>
-    <script>webgazer.setGazeListener(function(data, elapsedTime) {
+    <script>
+        webgazer.begin()
+        webgazer.setGazeListener(function(data, elapsedTime) {
         if (data == null) {
             return;
         }
