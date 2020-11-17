@@ -1,5 +1,9 @@
 'use strict';
 
+/* use full screen ****************************************************/
+/*var result=document.documentElement.requestFullscreen();
+only works if bound to a button or something...
+*/
 /* TOUCH INPUT ********************************************************/
 const SWIPE_THRESHOLD = 30; /* in pixels */
 const SWIPE_DIR_MARGIN = 1/16; /* angle, factor PI omitted */
