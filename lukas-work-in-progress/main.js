@@ -203,7 +203,7 @@ function highlightToUpper(){
 /* main control finite state machine **********************************/
 const STANDARD_BORDERED = 0;
 const STANDARD_TRANS_OUT = 1;
-const STANDARD_UNBOARDERED = 2;
+const STANDARD_UNBORDERED = 2;
 const STANDARD_TRANS_IN = 3;
 const DANGLING = 4;
 
