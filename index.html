@@ -8,6 +8,7 @@
             crossorigin="anonymous">
 <!-- Internal CSS -->
     <style>
+        /* tags */
         body {  background-color: #F0F8FA;}
         h1   {  color: black;
                 font-family: Helvetica;
@@ -22,6 +23,10 @@
         div  {  text-align: center;
                 padding: 4px;
                 margin-top: 4px;}
+        canvas {border: 1px solid #000;
+                width: 100%;
+                height: auto;}
+        /* classes */
         .row {  align-items: center;}
         .responsive {       width: 100%;
                             height: auto;}
@@ -34,23 +39,16 @@
                             justify-content: space-evenly;}
     </style>
 	
-	<!--
-	<script src="pdfjs/src/pdf.js" type="text/javascript"></script>
-	<script>
-		var loadingTask = pdfjsLib.getDocument('images/12f-chopped.pdf');
-		loadingTask.promise.then(function(pdf) {
-			
-		});
-	</script>
-	-->
 </head>
 <body>
     <div class="container-fluid">
         <div class="row">
             <div class="col-lg-8 col-sm-12">
-				<iframe src=images/12f-chopped.pdf#page=1 class="responsive">
-					PDF not available
-				</iframe>
+                <div>
+                    <canvas id="odd_pages"></canvas>
+                </div>
+                <input type="image" id="prevOdd" src=images/prev.png alt="prev" width=20 height=20>
+                <input type="image" id="nextOdd" src=images/next.png alt="next" width=20 height=20>
             </div>
             <picture class="col-sm-12 col-lg-4 picture-frame">
                 <div class="col-sm-6 col-lg-12">
@@ -60,20 +58,27 @@
                     <img src=images/placekitten_500x210.png alt="Person 2" class="responsive">
                 </div>
                 <div class="col-sm-6 col-lg-12">
-                <img src=images/placekitten_500x210.png alt="Person 3" class="responsive">
+                    <img src=images/placekitten_500x210.png alt="Person 3" class="responsive">
                 </div>
                 <div class="col-sm-6 col-lg-12">
                     <img src=images/placekitten_500x210.png alt="Person 4" class="responsive">
                 </div>
             </picture>
             <div class="col-lg-8 col-sm-12">
-				<iframe src=images/12f-chopped.pdf#page=1 class="responsive">
-					PDF not available
-				</iframe>
+                <input type="image" id="prevEven" src=images/prev.png alt="prev" width=20 height=20>
+                <input type="image" id="nextEven" src=images/next.png alt="next" width=20 height=20>
+                <div>
+                    <canvas id="even_pages"></canvas>
+                </div>
             </div>
         </div>
     </div>
-	
+    
+    <!-- PDF.js and pdf_viewer.js -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/2.4.456/pdf.min.js"></script>
+    <script src="./pdfviewer.js" defer></script>
+
+    <!-- webgazer.js -->
     <p id="debug"></p>
     <script src="webgazer.js" type="text/javascript" ></script>
     <script>
