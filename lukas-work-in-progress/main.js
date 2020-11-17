@@ -2,6 +2,8 @@
 
 /* TOUCH INPUT ********************************************************/
 const SWIPE_THRESHOLD = 30; /* in pixels */
+const SWIPE_DIR_MARGIN = 1/16; /* angle, factor PI omitted */
+
 const IDLE = 0;
 const TENTATIVE = 1;
 var touchState = IDLE;
@@ -23,10 +25,17 @@ function process_touchend(ev) {
     }
     angle = angle + 0.5;
     if(distance > SWIPE_THRESHOLD){
-      console.log("swipe");
-      console.log(x);
-      console.log(y);
-      console.log(angle);
+      if(0.25 + SWIPE_DIR_MARGIN < angle && angle + SWIPE_DIR_MARGIN < 0.75){
+        console.log("swipe right");
+      } else if(0.75 + SWIPE_DIR_MARGIN < angle && angle + SWIPE_DIR_MARGIN < 1.25){
+	console.log("swipe up");
+      } else if(1.25 + SWIPE_DIR_MARGIN < angle && angle + SWIPE_DIR_MARGIN < 1.75){
+	console.log("swipe left");
+      } else if(1.75 + SWIPE_DIR_MARGIN < angle || angle + SWIPE_DIR_MARGIN < 0.25){
+	console.log("swipe down");
+      } else {
+        console.log("swipe with unclear direction, should warn user TODO.");
+      }
     } else {
       autoTurnToggle();
     }
@@ -55,8 +64,12 @@ var autoTurn = AUTOTURNON;
 function autoTurnToggle() {
   if(autoTurn == AUTOTURNON){
     autoTurn = AUTOTURNOFF;
+    document.getElementById("overlay-2").hidden=true;
+    document.getElementById("overlay-4").hidden=true;
   } else {
     autoTurn = AUTOTURNON;
+    document.getElementById("overlay-2").hidden=false;
+    document.getElementById("overlay-4").hidden=false;
   }
 }
 
@@ -101,8 +114,6 @@ const EYEGAZEXMAX = EYEGAZEXMIN + EYEGAZEACTIVEWIDTH;
 const EYEGAZEYMAX = EYEGAZEYMIN + EYEGAZEACTIVEHEIGHT;
 
 function setGazeIndicator(x, y) {
-  console.log("x: " + x + " y: " + y);
-  console.log(EYEGAZEXMIN + "-" + EYEGAZEXMAX + " " + EYEGAZEYMIN + "-" + EYEGAZEYMAX);
   if(EYEGAZEXMIN < x && x < EYEGAZEXMAX && EYEGAZEYMIN < y && y < EYEGAZEYMAX){
     if(y < EYEGAZEYMIN + EYEGAZEACTIVEHEIGHT * EYEGAZETOPFRACTION){
       eyeGazeSetTop();
@@ -115,6 +126,98 @@ function setGazeIndicator(x, y) {
     eyeGazeSetNone();
   }
 }
+
+/* sheet music highlight border upper/lower/transition ****************/
+const TRANSITIONDURATION = 3; /* in seconds. HACK: Defined independently in css file */
+
+const HIGHLIGHTUPPER = 0;
+const HIGHLIGHTUPPEROUT = 1;
+const HIGHLIGHTLOWERIN = 2;
+const HIGHLICHTLOWER = 3;
+const HIGHLIGHTLOWEROUT = 4;
+const HIGHLIGHTUPPERIN = 5;
+var highlightState = HIGHLIGHTUPPER;
+
+var scheduledStateTransition;
+
+function enableHighlight(which, transition){
+  document.getElementById("sheet-music-border-" + which).style["transition-duration"] = transition + "s";
+  document.getElementById("sheet-music-border-" + which).style.border = "2px solid green";
+}
+
+function disableHighlight(which, transition){
+  document.getElementById("sheet-music-border-" + which).style["transition-duration"] = transition + "s";
+  document.getElementById("sheet-music-border-" + which).style.border = "2px solid transparent";
+}
+
+function transitionUpDown1(){
+  highlightState = HIGHLIGHTLOWERIN;
+  enableHighlight("lower", TRANSITIONDURATION);
+  scheduledStateTransition = window.setTimeout(transitionUpDown2, TRANSITIONDURATION*1000);
+}
+
+function transitionUpDown2(){
+  hightlightState = HIGHTLIGHTLOWER;
+}
+
+function transitionDownUp1(){
+  highlightState = HIGHLIGHTUPPERIN;
+  enableHighlight("upper", TRANSITIONDURATION);
+  scheduledStateTransition = window.setTimeout(transitionDownUp2, TRANSITIONDURATION*1000);
+}
+
+function transitionDownUp2(){
+  hightlightState = HIGHTLIGHTUPPER;
+}
+
+function highlightToLower(){
+  if(highlightState == HIGHTLIGHTLOWER){
+    console.log("error: was already in lower state");
+  } else if(highlightState == HIGHTLIGHTLOWERIN || highlightState == HIGHTLIGHTUPPEROUT){
+    highlightState = HIGHLIGHTLOWER;
+    enableHighlight("lower", 0);
+    disableHighlight("upper", 0);
+    window.clearTimeout(scheduledStateTransition);
+  } else if(highlightState == HIGHTLIGHTUPPER){
+    highlightState = HIGHLIGHTUPPEROUT;
+    disableHighlight("upper", TRANSITIONDURATION);
+    scheduledStateTransition = window.setTimeout(transitionUpDown1, TRANSITIONDURATION*1000);
+  }
+}
+
+function highlightToUpper(){
+  if(highlightState == HIGHTLIGHTUPPER){
+    console.log("error: was already in upper state");
+  } else if(highlightState == HIGHTLIGHTLOWEROUT || highlightState == HIGHTLIGHTUPPERIN){
+    highlightState = HIGHLIGHTUPPER;
+    disableHighlight("lower", 0);
+    enableHighlight("upper", 0);
+    window.clearTimeout(scheduledStateTransition);
+  } else if(highlightState == HIGHTLIGHTLOWER){
+    highlightState = HIGHLIGHTLOWEROUT;
+    disableHighlight("lower", TRANSITIONDURATION);
+    scheduledStateTransition = window.setTimeout(transitionDownUp1, TRANSITIONDURATION*1000);
+  }
+}
+
+/* main control finite state machine **********************************/
+const STANDARD_BORDERED = 0;
+const STANDARD_TRANS_OUT = 1;
+const STANDARD_UNBOARDERED = 2;
+const STANDARD_TRANS_IN = 3;
+const DANGLING = 4;
+
+/* need two instances of this machine, so two states */
+var stateUpper = STANDARD_BORDERED;
+var stateLower = STANDARD_UNBORDERED;
+
+/* functions invoked when some condition for a state change holds */
+function swipeRight(){}
+function swipeUp(){}
+function swipeLeft(){}
+function swipeDown(){}
+function eyeUp(){}
+function eyeDown(){}
 
 /* fake eye gaze with mouse *******************************************/
 document.getElementById("app-container").addEventListener('mousemove', mousemoveHandler);
