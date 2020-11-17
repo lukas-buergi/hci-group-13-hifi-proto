@@ -78,6 +78,9 @@ div.sheet-music-border {
 #sheet-music-border-upper {
   border: 2px solid green;
 }
+#sheet-music-border-lower {
+  border: 2px solid transparent;
+}
 #video-display {
   /* fill space left over after sheet music diplays */
   flex: 1;

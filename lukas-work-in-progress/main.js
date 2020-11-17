@@ -133,7 +133,7 @@ const TRANSITIONDURATION = 3; /* in seconds. HACK: Defined independently in css 
 const HIGHLIGHTUPPER = 0;
 const HIGHLIGHTUPPEROUT = 1;
 const HIGHLIGHTLOWERIN = 2;
-const HIGHLICHTLOWER = 3;
+const HIGHLIGHTLOWER = 3;
 const HIGHLIGHTLOWEROUT = 4;
 const HIGHLIGHTUPPERIN = 5;
 var highlightState = HIGHLIGHTUPPER;
@@ -157,7 +157,7 @@ function transitionUpDown1(){
 }
 
 function transitionUpDown2(){
-  hightlightState = HIGHTLIGHTLOWER;
+  highlightState = HIGHLIGHTLOWER;
 }
 
 function transitionDownUp1(){
@@ -167,18 +167,18 @@ function transitionDownUp1(){
 }
 
 function transitionDownUp2(){
-  hightlightState = HIGHTLIGHTUPPER;
+  highlightState = HIGHLIGHTUPPER;
 }
 
 function highlightToLower(){
-  if(highlightState == HIGHTLIGHTLOWER){
+  if(highlightState == HIGHLIGHTLOWER){
     console.log("error: was already in lower state");
-  } else if(highlightState == HIGHTLIGHTLOWERIN || highlightState == HIGHTLIGHTUPPEROUT){
+  } else if(highlightState == HIGHLIGHTLOWERIN || highlightState == HIGHLIGHTUPPEROUT){
     highlightState = HIGHLIGHTLOWER;
     enableHighlight("lower", 0);
     disableHighlight("upper", 0);
     window.clearTimeout(scheduledStateTransition);
-  } else if(highlightState == HIGHTLIGHTUPPER){
+  } else if(highlightState == HIGHLIGHTUPPER){
     highlightState = HIGHLIGHTUPPEROUT;
     disableHighlight("upper", TRANSITIONDURATION);
     scheduledStateTransition = window.setTimeout(transitionUpDown1, TRANSITIONDURATION*1000);
@@ -186,14 +186,14 @@ function highlightToLower(){
 }
 
 function highlightToUpper(){
-  if(highlightState == HIGHTLIGHTUPPER){
+  if(highlightState == HIGHLIGHTUPPER){
     console.log("error: was already in upper state");
-  } else if(highlightState == HIGHTLIGHTLOWEROUT || highlightState == HIGHTLIGHTUPPERIN){
+  } else if(highlightState == HIGHLIGHTLOWEROUT || highlightState == HIGHLIGHTUPPERIN){
     highlightState = HIGHLIGHTUPPER;
     disableHighlight("lower", 0);
     enableHighlight("upper", 0);
     window.clearTimeout(scheduledStateTransition);
-  } else if(highlightState == HIGHTLIGHTLOWER){
+  } else if(highlightState == HIGHLIGHTLOWER){
     highlightState = HIGHLIGHTLOWEROUT;
     disableHighlight("lower", TRANSITIONDURATION);
     scheduledStateTransition = window.setTimeout(transitionDownUp1, TRANSITIONDURATION*1000);
