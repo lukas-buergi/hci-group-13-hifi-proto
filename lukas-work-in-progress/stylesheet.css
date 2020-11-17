@@ -96,25 +96,34 @@ div.video {
 div.overlay {
   position: absolute;
 
+  border-width: 1px;
+
   /* display on top */
   z-index: 2;
 
   /* debug */
-  background: rgba(0,255,255,0.5);
+  /*background: rgba(0,255,255,0.5);*/
 }
 #overlay-1 {
   top: 0;
   left: 0;
+  border-style: none solid solid none;
 }
 #overlay-2 {
   top: 0;
   right: 0;
+  border-style: none none solid solid;
 }
+#overlay-2 > img, #overlay-4 > img {
+    width: 30px;
+  }
 #overlay-3 {
   bottom: 0;
   left: 0;
+  border-style: solid solid none none;
 }
 #overlay-4 {
   bottom: 0;
   right: 0;
+  border-style:  solid none none solid;
 }
