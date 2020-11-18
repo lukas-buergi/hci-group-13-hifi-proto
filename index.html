@@ -41,13 +41,15 @@
 			width: 100%;
 			background-color: #F0F8FA;
 			color: black;
-			padding: 12px;
+			padding: 6px;
 			margin: 0;
 			text-decoration: none;
 			list-style-type: none;
 		}
 		.nav-bar-element {
 			display: inline;
+			padding-left: 6px;
+			padding-right: 6px;
 		}
     </style>
 	
@@ -55,12 +57,11 @@
 <body>
     <div class="container-fluid">
         <div class="row">
-			<ul class="nav-bar">
-				<li class="nav-bar-element"><a href="#" class="active">Home</a></li>
-				<li class="nav-bar-element"><a href="#">Option 1</a></li>
-				<li class="nav-bar-element"><a href="#">Option 2</a></li>
-				<li class="nav-bar-element"><a href="#">Option 3</a></li>
-				<li class="nav-bar-element"><a href="#">Option 4</a></li>
+			<ul class="nav-bar" id="menu-bar">
+				<li class="nav-bar-element"><a href="#" class="active">Stop</a></li>
+				<li class="nav-bar-element"><a href="#">Restart</a></li>
+				<li class="nav-bar-element"><a href="#">Pause</a></li>
+				<li class="nav-bar-element"><a href="#">Continue</a></li>
 			</ul>
             <div class="col-lg-8 col-sm-12">
                 <div>
@@ -69,7 +70,7 @@
                 <input type="image" id="prevOdd" src=images/prev.png alt="prev" width=20 height=20>
                 <input type="image" id="nextOdd" src=images/next.png alt="next" width=20 height=20>
             </div>
-            <picture class="col-sm-12 col-lg-4 picture-frame">
+            <picture class="col-sm-12 col-lg-4 picture-frame" id="picture-container">
                 <div class="col-sm-6 col-lg-12">
                     <img src=images/placekitten_500x210.png alt="Person 1" class="responsive">
                 </div>
@@ -90,8 +91,33 @@
                     <canvas id="even_pages"></canvas>
                 </div>
             </div>
+			<ul class="nav-bar" id="status-bar">
+				<li class="nav-bar-element">Recording in progress</li>
+				<li class="nav-bar-element">Time: 2min 10s</li>
+				<li class="nav-bar-element">Connection: 5/5</li>
+			</ul>
         </div>
     </div>
+	
+	<!-- status/menu bar hide and seek -->
+	<script type="text/javascript">
+		document.getElementById("picture-container").ondblclick = function () {
+			var menu-bar = document.getElementById("menu-bar");
+			var status-bar = document.getElementById("status-bar");
+			
+			if(menu-bar.style.display == "inline"){
+				menu-bar.style.display = "none";
+			} else {
+				menu-bar.style.display = "inline";
+			}
+			
+			if(status-bar.style.display == "inline"){
+				status-bar.style.display = "none";
+			} else {
+				status-bar.style.display = "inline";
+			}
+		}
+	</script>
     
     <!-- PDF.js and pdf_viewer.js -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/2.4.456/pdf.min.js"></script>
