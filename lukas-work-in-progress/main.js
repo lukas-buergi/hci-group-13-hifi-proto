@@ -155,7 +155,7 @@ function averageGaze(current){
 }
 
 /* sheet music highlight border upper/lower/transition ****************/
-const TRANSITIONDURATION = 3; /* in seconds. HACK: Defined independently in css file */
+const TRANSITIONDURATION = 2; /* in seconds. */
 
 const HIGHLIGHTUPPER = 0;
 const HIGHLIGHTUPPEROUT = 1;
