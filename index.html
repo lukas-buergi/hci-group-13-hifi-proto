@@ -45,6 +45,8 @@
 			margin: 0;
 			text-decoration: none;
 			list-style-type: none;
+		}
+		.nav-bar-element {
 			display: inline;
 		}
     </style>
@@ -54,11 +56,11 @@
     <div class="container-fluid">
         <div class="row">
 			<ul class="nav-bar">
-				<li><a href="#" class="active">Home</a></li>
-				<li><a href="#">Option 1</a></li>
-				<li><a href="#">Option 2</a></li>
-				<li><a href="#">Option 3</a></li>
-				<li><a href="#">Option 4</a></li>
+				<li class="nav-bar-element"><a href="#" class="active">Home</a></li>
+				<li class="nav-bar-element"><a href="#">Option 1</a></li>
+				<li class="nav-bar-element"><a href="#">Option 2</a></li>
+				<li class="nav-bar-element"><a href="#">Option 3</a></li>
+				<li class="nav-bar-element"><a href="#">Option 4</a></li>
 			</ul>
             <div class="col-lg-8 col-sm-12">
                 <div>
@@ -116,7 +118,7 @@
         
       var x = prediction.x;
       var y = prediction.y;
-      document.getElementById("debug").innerHTML = x+";"+y; 
+      console.log(x+";"+y)
       }
     </script>
 </body>

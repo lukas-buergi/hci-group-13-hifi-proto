@@ -15,7 +15,7 @@ body {
   
   /* 16:9 aspect ratio, centered on screen */
   height: 100vh; 
-  width: 56.25vh;
+  width: 100vw;
   margin: auto;
 
   /* alignment of children */
@@ -24,6 +24,10 @@ body {
 
   /* make children's reference for absolute be this div */
   position: relative;
+}
+#fullscreen {
+  position: absolute;
+  z-index: 2;
 }
 #touch-capture {
   /* fill whole app-container */
@@ -50,8 +54,8 @@ body {
 div.sheet-music {
   /* 200:75 aspect ratio */
   width: 100%;
-  height: calc(56.25% * (75 / 200)); /* HACK: Need to adjust 56.25 if changing aspect ratio */
-
+  height: 0;
+  padding-bottom: calc(100% * 75 / 200);
   /* highlight / border */
   position: relative;
 
@@ -63,23 +67,30 @@ div.sheet-music {
   background-size: 20px 20px;
   background-position: 0 0, 0 10px, 10px -10px, -10px 0px;
 }
+#lower-pdf, #upper-pdf{
+  width: 100%;
+  height: 100%;
+  position: absolute;
+  top: 0;
+  left: 0;
+}
 div.sheet-music-border {
   position: absolute;
   top: 0;
   left: 0;
-  width: calc(100% - 4px);
-  height: calc(100% - 4px);
+  width: calc(100% - 6px);
+  height: calc(100% - 6px);
 
   background: transparent;
 
   transition-property: border;
-  transition-duration: 3s;
+  transition-timing-function: cubic-bezier(0.32, 0, 0.67, 0);
 }
 #sheet-music-border-upper {
-  border: 2px solid green;
+  border: 3px solid #9f9;
 }
 #sheet-music-border-lower {
-  border: 2px solid transparent;
+  border: 3px solid transparent;
 }
 #video-display {
   /* fill space left over after sheet music diplays */
@@ -97,6 +108,10 @@ div.video {
   text-align: center;
   font-size: xxx-large;
   background: rgba(0,255,0,0.5);
+}
+.video > img {
+  width: 100%;
+  height: 100%;
 }
 #video-1 {
   top: 0;
@@ -117,13 +132,12 @@ div.video {
 div.overlay {
   position: absolute;
 
-  border-width: 1px;
+  border-width: 0px;
 
   /* display on top */
   z-index: 2;
 
-  /* debug */
-  /*background: rgba(0,255,255,0.5);*/
+  background: #eee;
 }
 #overlay-1 {
   top: 0;
