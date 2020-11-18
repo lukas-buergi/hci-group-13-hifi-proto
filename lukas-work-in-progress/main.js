@@ -230,9 +230,13 @@ function highlightToUpper(){
 /* adjust pages displayed *********************************************/
 function setPageUpper(number){
   document.getElementById("sheet-music-upper-content").innerHTML = number;
+  pageNumberUpper = number;
+  console.log("set page upper: " + number);
 }
 function setPageLower(number){
   document.getElementById("sheet-music-lower-content").innerHTML = number;
+  pageNumberLower = number;
+  console.log("set page lower: " + number);
 }
 
 /* main control finite state machine **********************************/
