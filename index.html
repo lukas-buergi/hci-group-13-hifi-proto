@@ -37,12 +37,29 @@
                             display: flex;
                             flex-wrap: wrap;
                             justify-content: space-evenly;}
+		.nav-bar {
+			width: 100%;
+			background-color: #F0F8FA;
+			color: black;
+			display: block;
+			padding: 12px;
+			margin: 0;
+			text-decoration: none;
+			list-style-type: none;
+		}
     </style>
 	
 </head>
 <body>
     <div class="container-fluid">
         <div class="row">
+			<ul class="nav-bar">
+				<li><a href="#" class="active">Home</a></li>
+				<li><a href="#">Option 1</a></li>
+				<li><a href="#">Option 2</a></li>
+				<li><a href="#">Option 3</a></li>
+				<li><a href="#">Option 4</a></li>
+			</ul>
             <div class="col-lg-8 col-sm-12">
                 <div>
                     <canvas id="odd_pages"></canvas>
