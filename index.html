@@ -58,10 +58,10 @@
     <div class="container-fluid">
         <div class="row">
 			<ul class="nav-bar" id="menu">
-				<li class="nav-bar-element"><a href="#" class="active">Stop</a></li>
-				<li class="nav-bar-element"><a href="#">Restart</a></li>
-				<li class="nav-bar-element"><a href="#">Pause</a></li>
-				<li class="nav-bar-element"><a href="#">Continue</a></li>
+				<li class="nav-bar-element" id="menu_element"><a href="#" class="active">Stop</a></li>
+				<li class="nav-bar-element" id="menu_element"><a href="#">Restart</a></li>
+				<li class="nav-bar-element" id="menu_element"><a href="#">Pause</a></li>
+				<li class="nav-bar-element" id="menu_element"><a href="#">Continue</a></li>
 			</ul>
             <div class="col-lg-8 col-sm-12">
                 <div>
@@ -103,12 +103,13 @@
 	<script type="text/javascript">
 		document.getElementById("picture_container").onclick = function () {
 			var menu = document.getElementById("menu");
+			var menu_element = document.getElementById("menu_element");
 			var status = document.getElementById("status");
 			
-			if(menu.style.display == "none"){
-				menu.style.display = "block";
+			if(menu_element.style.display == "none"){
+				menu_element.style.display = "inline";
 			} else {
-				menu.style.display = "none";
+				menu_element.style.display = "none";
 			}
 			
 			if(status.style.display == "none"){
