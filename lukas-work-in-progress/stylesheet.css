@@ -63,12 +63,16 @@ div.sheet-music {
   background-size: 20px 20px;
   background-position: 0 0, 0 10px, 10px -10px, -10px 0px;
 }
+#lower-pdf, #upper-pdf{
+  width: 100%;
+  height: 100%;
+}
 div.sheet-music-border {
   position: absolute;
   top: 0;
   left: 0;
-  width: calc(100% - 4px);
-  height: calc(100% - 4px);
+  width: calc(100% - 6px);
+  height: calc(100% - 6px);
 
   background: transparent;
 
@@ -76,10 +80,10 @@ div.sheet-music-border {
   transition-duration: 3s;
 }
 #sheet-music-border-upper {
-  border: 2px solid green;
+  border: 3px solid #9f9;
 }
 #sheet-music-border-lower {
-  border: 2px solid transparent;
+  border: 3px solid transparent;
 }
 #video-display {
   /* fill space left over after sheet music diplays */
@@ -97,6 +101,10 @@ div.video {
   text-align: center;
   font-size: xxx-large;
   background: rgba(0,255,0,0.5);
+}
+.video > img {
+  width: 100%;
+  height: 100%;
 }
 #video-1 {
   top: 0;
@@ -117,13 +125,12 @@ div.video {
 div.overlay {
   position: absolute;
 
-  border-width: 1px;
+  border-width: 0px;
 
   /* display on top */
   z-index: 2;
 
-  /* debug */
-  /*background: rgba(0,255,255,0.5);*/
+  background: #eee;
 }
 #overlay-1 {
   top: 0;

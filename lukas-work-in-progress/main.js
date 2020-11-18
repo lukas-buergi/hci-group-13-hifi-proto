@@ -169,12 +169,12 @@ var scheduledStateTransition;
 
 function enableHighlight(which, transition){
   document.getElementById("sheet-music-border-" + which).style["transition-duration"] = transition + "s";
-  document.getElementById("sheet-music-border-" + which).style.border = "2px solid green";
+  document.getElementById("sheet-music-border-" + which).style.border = "3px solid #9f9";
 }
 
 function disableHighlight(which, transition){
   document.getElementById("sheet-music-border-" + which).style["transition-duration"] = transition + "s";
-  document.getElementById("sheet-music-border-" + which).style.border = "2px solid transparent";
+  document.getElementById("sheet-music-border-" + which).style.border = "3px solid transparent";
 }
 
 function transitionUpDown1(){
@@ -228,15 +228,39 @@ function highlightToUpper(){
     scheduledStateTransition = window.setTimeout(transitionDownUp1, TRANSITIONDURATION*1000);
   }
 }
+/* display pdf, set up ************************************************/
+let loadPDF =   pdfjsLib.getDocument("./music.pdf"),
+                pdfDoc = null;
+
+loadPDF.promise.then(pdf => {
+    pdfDoc = pdf;
+    displayPage("upper", pageNumberUpper);
+    displayPage("lower", pageNumberLower);
+});
 
 /* adjust pages displayed *********************************************/
+function displayPage(where, number){
+  pdfDoc.getPage(number).then(page => {
+    let canvas = document.getElementById(where + "-pdf");
+    canvas.height = canvas.clientHeight;
+    canvas.width = canvas.clientWidth;
+    let viewport = page.getViewport({scale: canvas.width / page.getViewport({scale: 1.0}).width});
+    let renderContext = {
+      canvasContext : canvas.getContext("2d"),
+      viewport:  viewport
+    }
+
+    page.render(renderContext);
+  })
+}
+
 function setPageUpper(number){
-  document.getElementById("sheet-music-upper-content").innerHTML = number;
+  displayPage("upper", number);
   pageNumberUpper = number;
   console.log("set page upper: " + number);
 }
 function setPageLower(number){
-  document.getElementById("sheet-music-lower-content").innerHTML = number;
+  displayPage("lower", number);
   pageNumberLower = number;
   console.log("set page lower: " + number);
 }
