@@ -25,6 +25,10 @@ body {
   /* make children's reference for absolute be this div */
   position: relative;
 }
+#fullscreen {
+  position: absolute;
+  z-index: 2;
+}
 #touch-capture {
   /* fill whole app-container */
   position: absolute;
