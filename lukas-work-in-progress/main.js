@@ -1,9 +1,5 @@
 'use strict';
 
-/* use full screen ****************************************************/
-/*var result=document.documentElement.requestFullscreen();
-only works if bound to a button or something...
-*/
 /* TOUCH INPUT ********************************************************/
 const SWIPE_THRESHOLD = 30; /* in pixels */
 const SWIPE_DIR_MARGIN = 1/16; /* angle, factor PI omitted */
@@ -89,16 +85,20 @@ function eyeGazeSetTop() {
   eyeGazeIndicator = EYEGAZETOP;
   document.querySelector("#overlay-2 > img").src = EYEGAZEACTIVE;
   document.querySelector("#overlay-4 > img").src = EYEGAZEINACTIVE;
+
+  averageGaze(1);
 }
 
 function eyeGazeSetBottom() {
   eyeGazeIndicator = EYEGAZEBOT;
   document.querySelector("#overlay-4 > img").src = EYEGAZEACTIVE;
   document.querySelector("#overlay-2 > img").src = EYEGAZEINACTIVE;
+
+  averageGaze(0);
 }
 
 function eyeGazeSetNone() {
-  eyeGazeIndicator = EYEGAZEBOT;
+  eyeGazeIndicator = EYEGAZENO;
   document.querySelector("#overlay-2 > img").src = EYEGAZEINACTIVE;
   document.querySelector("#overlay-4 > img").src = EYEGAZEINACTIVE;
 }
@@ -117,6 +117,8 @@ const EYEGAZEYMIN = document.getElementById("app-container").getBoundingClientRe
 const EYEGAZEXMAX = EYEGAZEXMIN + EYEGAZEACTIVEWIDTH; 
 const EYEGAZEYMAX = EYEGAZEYMIN + EYEGAZEACTIVEHEIGHT;
 
+var currentGaze;
+
 function setGazeIndicator(x, y) {
   if(EYEGAZEXMIN < x && x < EYEGAZEXMAX && EYEGAZEYMIN < y && y < EYEGAZEYMAX){
     if(y < EYEGAZEYMIN + EYEGAZEACTIVEHEIGHT * EYEGAZETOPFRACTION){
@@ -128,6 +130,25 @@ function setGazeIndicator(x, y) {
     }
   } else {
     eyeGazeSetNone();
+  }
+}
+
+/* evaluate automatic page turn condition *****************************/
+const GAZE_AVERAGING_FACTOR = 0.2;
+const GAZE_SWITCH_THRESHOLD = 0.8;
+var recentAverageGaze = 1;
+var currentNormalizedGaze = 1;
+
+function averageGaze(current){
+  recentAverageGaze = recentAverageGaze * (1 - GAZE_AVERAGING_FACTOR) + current * GAZE_AVERAGING_FACTOR;
+  if(Math.abs(currentNormalizedGaze-recentAverageGaze) > GAZE_SWITCH_THRESHOLD){
+    if(currentNormalizedGaze == 1){
+      currentNormalizedGaze = 0;
+      eyeDown();
+    } else {
+      currentNormalizedGaze = 1;
+      eyeUp();
+    }
   }
 }
 
@@ -162,6 +183,7 @@ function transitionUpDown1(){
 
 function transitionUpDown2(){
   highlightState = HIGHLIGHTLOWER;
+  setPageUpper(pageNumberLower + 1)
 }
 
 function transitionDownUp1(){
@@ -172,6 +194,7 @@ function transitionDownUp1(){
 
 function transitionDownUp2(){
   highlightState = HIGHLIGHTUPPER;
+  setPageLower(pageNumberUpper + 1)
 }
 
 function highlightToLower(){
@@ -204,6 +227,14 @@ function highlightToUpper(){
   }
 }
 
+/* adjust pages displayed *********************************************/
+function setPageUpper(number){
+  document.getElementById("sheet-music-upper-content").innerHTML = number;
+}
+function setPageLower(number){
+  document.getElementById("sheet-music-lower-content").innerHTML = number;
+}
+
 /* main control finite state machine **********************************/
 const STANDARD_BORDERED = 0;
 const STANDARD_TRANS_OUT = 1;
@@ -214,17 +245,44 @@ const DANGLING = 4;
 /* need two instances of this machine, so two states */
 var stateUpper = STANDARD_BORDERED;
 var stateLower = STANDARD_UNBORDERED;
+var pageNumberUpper = 1;
+var pageNumberLower = 2;
+
 
 /* functions invoked when some condition for a state change holds */
 function swipeRight(){}
 function swipeUp(){}
 function swipeLeft(){}
 function swipeDown(){}
-function eyeUp(){}
-function eyeDown(){}
+function eyeUp(){
+  console.log("eye up");
+  highlightToUpper();
+}
+function eyeDown(){
+  console.log("eye down");
+  highlightToLower();
+}
 
-/* fake eye gaze with mouse *******************************************/
+/* fake eye gaze with mouse, defined sampling rate ********************/
+const SAMPLINGRATE = 5 /* Hz */
+var delayElapsed = true;
+document.getElementById("app-container").addEventListener('mousemove', mousemoveSampler);
+function mousemoveSampler(ev){
+  if(delayElapsed){
+    /* even though this would be broken parallelism in most languages,
+     * I think in js's concurrency model it actually works, last I
+     * checked. Doesn't matter much anyway, the sampling rate doesn't
+     * need to be exact. */
+    delayElapsed = false;
+    setGazeIndicator(ev.clientX, ev.clientY);
+    window.setTimeout(function(){delayElapsed=true;}, 1000/SAMPLINGRATE);
+  }
+}
+
+/* fake eye gaze with mouse, arbitrary sampling ***********************/
+/*
 document.getElementById("app-container").addEventListener('mousemove', mousemoveHandler);
 function mousemoveHandler(ev) {
   setGazeIndicator(ev.clientX, ev.clientY);
 }
+*/
