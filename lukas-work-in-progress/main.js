@@ -140,14 +140,16 @@ var recentAverageGaze = 1;
 var currentNormalizedGaze = 1;
 
 function averageGaze(current){
-  recentAverageGaze = recentAverageGaze * (1 - GAZE_AVERAGING_FACTOR) + current * GAZE_AVERAGING_FACTOR;
-  if(Math.abs(currentNormalizedGaze-recentAverageGaze) > GAZE_SWITCH_THRESHOLD){
-    if(currentNormalizedGaze == 1){
-      currentNormalizedGaze = 0;
-      eyeDown();
-    } else {
-      currentNormalizedGaze = 1;
-      eyeUp();
+  if(eyeGazeIndicator != EYEGAZENO){
+    recentAverageGaze = recentAverageGaze * (1 - GAZE_AVERAGING_FACTOR) + current * GAZE_AVERAGING_FACTOR;
+    if(Math.abs(currentNormalizedGaze-recentAverageGaze) > GAZE_SWITCH_THRESHOLD){
+      if(currentNormalizedGaze == 1){
+        currentNormalizedGaze = 0;
+        eyeDown();
+      } else {
+        currentNormalizedGaze = 1;
+        eyeUp();
+      }
     }
   }
 }
