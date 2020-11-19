@@ -140,7 +140,7 @@ var recentAverageGaze = 1;
 var currentNormalizedGaze = 1;
 
 function averageGaze(current){
-  if(eyeGazeIndicator != EYEGAZENO){
+  if(autoTurn == AUTOTURNON){
     recentAverageGaze = recentAverageGaze * (1 - GAZE_AVERAGING_FACTOR) + current * GAZE_AVERAGING_FACTOR;
     if(Math.abs(currentNormalizedGaze-recentAverageGaze) > GAZE_SWITCH_THRESHOLD){
       if(currentNormalizedGaze == 1){
@@ -232,8 +232,11 @@ function highlightToUpper(){
     highlightState = HIGHLIGHTLOWEROUT;
     disableHighlight("lower", TRANSITIONDURATION);
     scheduledStateTransition = window.setTimeout(transitionDownUp1, TRANSITIONDURATION*1000);
-    stateLower = STANDARD_TRANS_OUT;
-    stateUpper = STANDARD_TRANS_IN;
+    stateLower = STANDARD_TRANS_OUT; // TODO
+    stateUpper = STANDARD_TRANS_IN; // TODO
+  } else if(highlightState == HIGHLIGHTLOWERIN || highlightState == HIGHLIGHTUPPEROUT){
+    /* we are animating out of upper, abort */
+	  // TODO
   }
 }
 /* display pdf, set up ************************************************/
@@ -289,9 +292,12 @@ var pageNumberLower = 2;
 
 
 /* functions invoked when some condition for a state change holds */
-function swipeRight(){
+
+
+/* go one page back the ordinary way */
+function turnBack(){
   if(stateUpper != DANGLING && stateLower != DANGLING){
-    if(pageNumberUpper > pageNumberLower){
+    if(false){
       
     }
   }
