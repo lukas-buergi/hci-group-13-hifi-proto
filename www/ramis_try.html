@@ -1,10 +1,31 @@
 <!DOCTYPE html>
+<html>
 <meta charset="utf-8">
 <head>
   <title>Webgazer.js + D3.js collision demo</title>
 </head>
 <body>
-  <script src="./webgazer.js"></script>
-  <script src="./js/main.js"></script>
+  <script>
+      function recordGaze() {
+            webgazer.setGazeListener(function (data, elapsedTime) {
+                if (data == null) {
+                    return;
+                }
+                var xprediction = data.x; 
+                var yprediction = data.y;
 
+                var save_url = "https://anupm12.github.io/Eye-tracking-WebGazer.js/?"+"x="+xprediction+";y="+yprediction;
+
+                var temp_image = new Image();
+
+                temp_image.src= save_url;
+                x.push([xprediction, yprediction]);
+                console.log(xprediction + "," + yprediction);
+            }).begin();
+        } 
+
+
+  </script>
 </body>
+  <script src="./webgazer.js"></script>
+</html>
