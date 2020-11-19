@@ -11,8 +11,9 @@
   </div>
 
   <script>
-    webgazer.params.showVideoPreview = true;
       function recordGaze() {
+        
+    webgazer.params.showVideoPreview = true;
             webgazer.setGazeListener(function (data, elapsedTime) {
                 if (data == null) {
                     return;
