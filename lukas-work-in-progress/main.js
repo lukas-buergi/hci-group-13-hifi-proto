@@ -339,24 +339,26 @@ function enableEyeGaze(){
   window.setTimeout(movePreview, 5000);
 }
 function movePreview(){
-  const previewEl1 = document.getElementById("webgazerVideoFeed");
-  const previewEl2 = document.getElementById("webgazerVideoCanvas");
-  const previewEl3 = document.getElementById("webgazerFaceOverlay");
-  const previewEl4 = document.getElementById("webgazerFaceFeedbackBox");
-  previewEl1.remove();
-  previewEl2.remove();
-  previewEl3.remove();
-  previewEl4.remove();
   const destination = document.getElementById("video-1");
   destination.innerHTML = "";
-  destination.append(previewEl1);
-  destination.append(previewEl2);
-  destination.append(previewEl3);
-  destination.append(previewEl4);
-  previewEl1.style.position = "absolute";
-  previewEl2.style.position = "absolute";
-  previewEl3.style.position = "absolute";
-  previewEl4.style.position = "absolute";
+  const previewElemIDs = ["webgazerVideoFeed", "webgazerVideoCanvas", "webgazerFaceOverlay", "webgazerFaceFeedbackBox"];
+  let previewElems = [];
+  previewElemIDs.forEach(el => previewElems.push(document.getElementById(el)));
+  previewElems.forEach(el => {
+    el.remove();
+    destination.append(el); 
+    el.style.position = "absolute"; 
+    el.style.height = destination.clientHeight; 
+    el.height = destination.clientHeight;
+    el.style.width = destination.clientWidth; 
+    el.width = destination.clientWidth;
+    if(el.id == "webgazerFaceFeedbackBox"){
+      el.style.top = destination.clientHeight / 4;
+      el.style.left = destination.clientWidth / 4;
+      el.style.height = destination.clientHeight / 2;
+      el.style.width = destination.clientWidth / 2;
+    }
+  });
 }
 function eyeGazeHandler(data, elapsedTime){
   if (data == null) {
