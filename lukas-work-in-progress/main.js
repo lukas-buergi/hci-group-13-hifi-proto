@@ -335,6 +335,28 @@ function downUpFinished(){
 function enableEyeGaze(){
   webgazer.params.showVideoPreview = true;
   webgazer.setGazeListener(eyeGazeHandler).begin();
+  /* might only work a bit later, so wait random amount */
+  window.setTimeout(movePreview, 5000);
+}
+function movePreview(){
+  const previewEl1 = document.getElementById("webgazerVideoFeed");
+  const previewEl2 = document.getElementById("webgazerVideoCanvas");
+  const previewEl3 = document.getElementById("webgazerFaceOverlay");
+  const previewEl4 = document.getElementById("webgazerFaceFeedbackBox");
+  previewEl1.remove();
+  previewEl2.remove();
+  previewEl3.remove();
+  previewEl4.remove();
+  const destination = document.getElementById("video-1");
+  destination.innerHTML = "";
+  destination.append(previewEl1);
+  destination.append(previewEl2);
+  destination.append(previewEl3);
+  destination.append(previewEl4);
+  previewEl1.style.position = "absolute";
+  previewEl2.style.position = "absolute";
+  previewEl3.style.position = "absolute";
+  previewEl4.style.position = "absolute";
 }
 function eyeGazeHandler(data, elapsedTime){
   if (data == null) {
