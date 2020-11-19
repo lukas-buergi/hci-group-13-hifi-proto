@@ -213,8 +213,10 @@ function highlightToLower(){
     highlightState = HIGHLIGHTUPPEROUT;
     disableHighlight("upper", TRANSITIONDURATION);
     scheduledStateTransition = window.setTimeout(transitionUpDown1, TRANSITIONDURATION*1000);
-    stateUpper = STANDARD_TRANS_OUT;
-    stateLower = STANDARD_TRANS_IN;
+    stateUpper = STANDARD_TRANS_OUT; // TODO
+    stateLower = STANDARD_TRANS_IN; // TODO
+  } else {
+  // TODO
   }
 }
 
@@ -247,7 +249,7 @@ loadPDF.promise.then(pdf => {
     pdfDoc = pdf;
     displayPage("upper", pageNumberUpper);
     displayPage("lower", pageNumberLower);
-    enableMouseFakeEye();
+    enableEyeGaze();
 });
 
 /* adjust pages displayed *********************************************/
@@ -278,6 +280,7 @@ function setPageLower(number){
 }
 
 /* main control finite state machine **********************************/
+// TODO
 const STANDARD_BORDERED = 0;
 const STANDARD_TRANS_OUT = 1;
 const STANDARD_UNBORDERED = 2;
@@ -326,6 +329,21 @@ function downUpFinished(){
   stateLower = STANDARD_UNBORDERED;
   stateUpper = STANDARD_BORDERED;
   setPageLower(pageNumberUpper + 1)
+}
+/* eye gaze input *****************************************************/
+
+function enableEyeGaze(){
+  webgazer.params.showVideoPreview = true;
+  webgazer.setGazeListener(eyeGazeHandler).begin();
+}
+function eyeGazeHandler(data, elapsedTime){
+  if (data == null) {
+    console.log("no prediction, maybe needs calibration?");
+  } else {
+    console.log(data.x + "," + data.y);
+    setGazeIndicator(data.x, data.y);
+  }
+
 }
 
 /* fake eye gaze with mouse, defined sampling rate ********************/
