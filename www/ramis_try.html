@@ -5,6 +5,11 @@
   <title>Webgazer.js + D3.js collision demo</title>
 </head>
 <body>
+  <div onclick="recordGaze()">
+    <button class="btn btn-light">Start</button>
+
+  </div>
+
   <script>
       function recordGaze() {
             webgazer.setGazeListener(function (data, elapsedTime) {
@@ -14,7 +19,6 @@
                 var xprediction = data.x; 
                 var yprediction = data.y;
 
-                var save_url = "https://anupm12.github.io/Eye-tracking-WebGazer.js/?"+"x="+xprediction+";y="+yprediction;
 
                 var temp_image = new Image();
 
@@ -27,5 +31,5 @@
 
   </script>
 </body>
-  <script src="./webgazer.js"></script>
+  <script src="https://webgazer.cs.brown.edu/webgazer.js"></script>
 </html>
