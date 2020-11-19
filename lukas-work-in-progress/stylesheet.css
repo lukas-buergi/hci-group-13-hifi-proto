@@ -13,9 +13,11 @@ body {
   background-color: white;
   border: none;
   
-  /* 16:9 aspect ratio, centered on screen */
+  /* full screen */
   height: 100vh; 
   width: 100vw;
+
+  /* center if not full screen */
   margin: auto;
 
   /* alignment of children */
@@ -25,7 +27,14 @@ body {
   /* make children's reference for absolute be this div */
   position: relative;
 }
+/* don't grow broader than 1/1 */
+@media (min-aspect-ratio: 1/1) {
+  #app-container {
+    width: 100vh;
+  }
+}
 #fullscreen {
+  font-size: xxx-large;
   position: absolute;
   z-index: 2;
 }

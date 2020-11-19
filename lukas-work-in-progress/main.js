@@ -185,7 +185,7 @@ function transitionUpDown1(){
 
 function transitionUpDown2(){
   highlightState = HIGHLIGHTLOWER;
-  setPageUpper(pageNumberLower + 1)
+  upDownFinished();
 }
 
 function transitionDownUp1(){
@@ -196,21 +196,25 @@ function transitionDownUp1(){
 
 function transitionDownUp2(){
   highlightState = HIGHLIGHTUPPER;
-  setPageLower(pageNumberUpper + 1)
+  downUpFinished();
 }
 
 function highlightToLower(){
   if(highlightState == HIGHLIGHTLOWER){
     console.log("error: was already in lower state");
   } else if(highlightState == HIGHLIGHTLOWERIN || highlightState == HIGHLIGHTUPPEROUT){
+    /* finish animation prematurely */
     highlightState = HIGHLIGHTLOWER;
     enableHighlight("lower", 0);
     disableHighlight("upper", 0);
     window.clearTimeout(scheduledStateTransition);
+    upDownFinished();
   } else if(highlightState == HIGHLIGHTUPPER){
     highlightState = HIGHLIGHTUPPEROUT;
     disableHighlight("upper", TRANSITIONDURATION);
     scheduledStateTransition = window.setTimeout(transitionUpDown1, TRANSITIONDURATION*1000);
+    stateUpper = STANDARD_TRANS_OUT;
+    stateLower = STANDARD_TRANS_IN;
   }
 }
 
@@ -218,14 +222,18 @@ function highlightToUpper(){
   if(highlightState == HIGHLIGHTUPPER){
     console.log("error: was already in upper state");
   } else if(highlightState == HIGHLIGHTLOWEROUT || highlightState == HIGHLIGHTUPPERIN){
+    /* finish animation prematurely */
     highlightState = HIGHLIGHTUPPER;
     disableHighlight("lower", 0);
     enableHighlight("upper", 0);
     window.clearTimeout(scheduledStateTransition);
+    downUpFinished();
   } else if(highlightState == HIGHLIGHTLOWER){
     highlightState = HIGHLIGHTLOWEROUT;
     disableHighlight("lower", TRANSITIONDURATION);
     scheduledStateTransition = window.setTimeout(transitionDownUp1, TRANSITIONDURATION*1000);
+    stateLower = STANDARD_TRANS_OUT;
+    stateUpper = STANDARD_TRANS_IN;
   }
 }
 /* display pdf, set up ************************************************/
@@ -236,6 +244,7 @@ loadPDF.promise.then(pdf => {
     pdfDoc = pdf;
     displayPage("upper", pageNumberUpper);
     displayPage("lower", pageNumberLower);
+    enableMouseFakeEye();
 });
 
 /* adjust pages displayed *********************************************/
@@ -280,23 +289,45 @@ var pageNumberLower = 2;
 
 
 /* functions invoked when some condition for a state change holds */
-function swipeRight(){}
+function swipeRight(){
+  if(stateUpper != DANGLING && stateLower != DANGLING){
+    if(pageNumberUpper > pageNumberLower){
+      
+    }
+  }
+}
 function swipeUp(){}
 function swipeLeft(){}
 function swipeDown(){}
 function eyeUp(){
   console.log("eye up");
   highlightToUpper();
+  stateUpper = STANDARD_TRANS_IN;
+  stateLower = STANDARD_TRANS_OUT;
 }
 function eyeDown(){
   console.log("eye down");
   highlightToLower();
+  stateLower = STANDARD_TRANS_IN;
+  stateUpper = STANDARD_TRANS_OUT;
+}
+function upDownFinished(){
+  stateLower = STANDARD_BORDERED;
+  stateUpper = STANDARD_UNBORDERED;
+  setPageUpper(pageNumberLower + 1)
+}
+function downUpFinished(){
+  stateLower = STANDARD_UNBORDERED;
+  stateUpper = STANDARD_BORDERED;
+  setPageLower(pageNumberUpper + 1)
 }
 
 /* fake eye gaze with mouse, defined sampling rate ********************/
 const SAMPLINGRATE = 5 /* Hz */
 var delayElapsed = true;
-document.getElementById("app-container").addEventListener('mousemove', mousemoveSampler);
+function enableMouseFakeEye(){
+  document.getElementById("app-container").addEventListener('mousemove', mousemoveSampler);
+}
 function mousemoveSampler(ev){
   if(delayElapsed){
     /* even though this would be broken parallelism in most languages,
