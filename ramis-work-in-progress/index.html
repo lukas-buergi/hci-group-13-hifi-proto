@@ -1,37 +1,185 @@
 <!DOCTYPE html>
 <html>
-<meta charset="utf-8">
 <head>
-  <title>Webgazer.js + D3.js collision demo</title>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta http-equiv="Content-Script-Type" content="text/javascript">
+<style>
+#overlay {
+  position: fixed;
+  display: none;
+  width: 100%;
+  height: 100%;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: rgba(0,0,0,0.8);
+  z-index: 2;
+  cursor: pointer;
+}
+
+#text{
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  font-size: 50px;
+  color: white;
+  transform: translate(-50%,-50%);
+  -ms-transform: translate(-50%,-50%);
+}
+    #point1 {
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      width: 50px;
+      height: 50px;
+      -webkit-border-radius: 25px;
+      -moz-border-radius: 25px;
+      border-radius: 25px;
+      background: red;
+    }
+    #point2 {
+      position: absolute;
+      top: 50%;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      width: 50px;
+      height: 50px;
+      -webkit-border-radius: 25px;
+      -moz-border-radius: 25px;
+      border-radius: 25px;
+      background: red;
+    }
+    #point3 {
+      position: absolute;
+      top: 90%;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      width: 50px;
+      height: 50px;
+      -webkit-border-radius: 25px;
+      -moz-border-radius: 25px;
+      border-radius: 25px;
+      background: red;
+    }
+    #point4 {
+      position: absolute;
+      top: 0;
+      left: 50%;
+      right: 0;
+      bottom: 0;
+      width: 50px;
+      height: 50px;
+      -webkit-border-radius: 25px;
+      -moz-border-radius: 25px;
+      border-radius: 25px;
+      background: red;
+    }
+    #point5 {
+      position: absolute;
+      top: 0;
+      left: 90%;
+      right: 0;
+      bottom: 0;
+      width: 50px;
+      height: 50px;
+      -webkit-border-radius: 25px;
+      -moz-border-radius: 25px;
+      border-radius: 25px;
+      background: red;
+    }
+    #point6 {
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      right: 0;
+      bottom: 0;
+      width: 50px;
+      height: 50px;
+      -webkit-border-radius: 25px;
+      -moz-border-radius: 25px;
+      border-radius: 25px;
+      background: red;
+    }
+    #point7 {
+      position: absolute;
+      top: 50%;
+      left: 90%;
+      right: 0;
+      bottom: 0;
+      width: 50px;
+      height: 50px;
+      -webkit-border-radius: 25px;
+      -moz-border-radius: 25px;
+      border-radius: 25px;
+      background: red;
+    }
+    #point8 {
+      position: absolute;
+      top: 90%;
+      left: 50%;
+      right: 0;
+      bottom: 0;
+      width: 50px;
+      height: 50px;
+      -webkit-border-radius: 25px;
+      -moz-border-radius: 25px;
+      border-radius: 25px;
+      background: red;
+    }
+    #point9 {
+      position: absolute;
+      top: 90%;
+      left: 90%;
+      right: 0;
+      bottom: 0;
+      width: 50px;
+      height: 50px;
+      -webkit-border-radius: 25px;
+      -moz-border-radius: 25px;
+      border-radius: 25px;
+      background: red;
+    }
+</style>
 </head>
 <body>
-  <div onclick="recordGaze()">
-    <button class="btn btn-light">Start</button>
 
-  </div>
+<div id="overlay">
+  <div id="text">Click on all Red ciricles 5 times to calibrate</div>
+  <div id="point1"></div>
+  <div id="point2" onclick="click('point2')"></div>
+  <div id="point3" onclick="click('point3')"></div>
+  <div id="point4" onclick="click('point4')"></div>
+  <div id="point5" onclick="click('point5')"></div>
+  <div id="point6" onclick="click('point6')"></div>
+  <div id="point7" onclick="click('point7')"></div>
+  <div id="point8" onclick="click('point8')"></div>
+  <div id="point9" onclick="click('point9')"></div>
+</div>
 
-  <script>
-      function recordGaze() {
-        
-    webgazer.params.showVideoPreview = true;
-            webgazer.setGazeListener(function (data, elapsedTime) {
-                if (data == null) {
-                    return;
-                }
-                var xprediction = data.x; 
-                var yprediction = data.y;
+<div style="padding:20px">
+  <h2>Overlay with Text</h2>
+  <button onclick="on()">Turn on overlay effect</button>
+</div>
 
+<script>
+document.getElementById('point1').onclick = click('point1');
+function on() {
+  document.getElementById("overlay").style.display = "block";
+}
 
-                var temp_image = new Image();
+function off() {
+  document.getElementById("overlay").style.display = "none";
+}
+function click(p) {
+  document.getElementById(p).style.display = "none";
+}
 
-                temp_image.src= save_url;
-                x.push([xprediction, yprediction]);
-                console.log(xprediction + "," + yprediction);
-            }).begin();
-        } 
-
-
-  </script>
+</script>
+   
 </body>
-  <script src="https://webgazer.cs.brown.edu/webgazer.js?"></script>
-</html>
+</html> 
