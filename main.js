@@ -254,18 +254,20 @@ loadPDF.promise.then(pdf => {
 
 /* adjust pages displayed *********************************************/
 function displayPage(where, number){
-  pdfDoc.getPage(number).then(page => {
-    let canvas = document.getElementById(where + "-pdf");
-    canvas.height = canvas.clientHeight;
-    canvas.width = canvas.clientWidth;
-    let viewport = page.getViewport({scale: canvas.width / page.getViewport({scale: 1.0}).width});
-    let renderContext = {
-      canvasContext : canvas.getContext("2d"),
-      viewport:  viewport
-    }
-
-    page.render(renderContext);
+  $("#" + where + "-pdf").fadeOut(1000, function() {
+    pdfDoc.getPage(number).then(page => {
+      let canvas = document.getElementById(where + "-pdf");
+      canvas.height = canvas.clientHeight;
+      canvas.width = canvas.clientWidth;
+      let viewport = page.getViewport({scale: canvas.width / page.getViewport({scale: 1.0}).width});
+      let renderContext = {
+        canvasContext : canvas.getContext("2d"),
+        viewport:  viewport
+      }
+      page.render(renderContext)
+    })
   })
+  $("#" + where + "-pdf").fadeIn(1000);
 }
 
 function setPageUpper(number){
