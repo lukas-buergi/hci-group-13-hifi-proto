@@ -77,8 +77,8 @@ function autoTurnToggle() {
 const EYEGAZENO = 0;
 const EYEGAZETOP = 1;
 const EYEGAZEBOT = -1;
-const EYEGAZEACTIVE = "./eyeActive.svg.png";
-const EYEGAZEINACTIVE = "./eyeInactive.svg.png";
+const EYEGAZEACTIVE = "./assets/images/eyeActive.svg.png";
+const EYEGAZEINACTIVE = "./assets/images/eyeInactive.svg.png";
 var eyeGazeIndicator = EYEGAZENO;
 
 function eyeGazeSetTop() {
@@ -242,7 +242,7 @@ function highlightToUpper(){
   }
 }
 /* display pdf, set up ************************************************/
-let loadPDF =   pdfjsLib.getDocument("./music.pdf"),
+let loadPDF =   pdfjsLib.getDocument("./assets/images/music.pdf"),
                 pdfDoc = null;
 
 loadPDF.promise.then(pdf => {
