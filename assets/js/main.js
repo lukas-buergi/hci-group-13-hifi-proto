@@ -1,5 +1,14 @@
 'use strict';
-
+/* Various ************************************************************/
+function whereNot(where){
+  if(where == "upper"){
+    return("lower");
+  } else if (where == "lower"){
+    return("upper");
+  } else {
+    console.log("bad usesage: whereNot()");
+  }
+}
 /* TOUCH INPUT ********************************************************/
 const SWIPE_THRESHOLD = 30; /* in pixels */
 const SWIPE_DIR_MARGIN = 1/16; /* angle, factor PI omitted */
@@ -27,12 +36,14 @@ function process_touchend(ev) {
     if(distance > SWIPE_THRESHOLD){
       if(0.25 + SWIPE_DIR_MARGIN < angle && angle + SWIPE_DIR_MARGIN < 0.75){
         console.log("swipe right");
+        turn("back");
       } else if(0.75 + SWIPE_DIR_MARGIN < angle && angle + SWIPE_DIR_MARGIN < 1.25){
-	console.log("swipe up");
+        console.log("swipe up");
       } else if(1.25 + SWIPE_DIR_MARGIN < angle && angle + SWIPE_DIR_MARGIN < 1.75){
-	console.log("swipe left");
+        console.log("swipe left");
+        turn("forward");
       } else if(1.75 + SWIPE_DIR_MARGIN < angle || angle + SWIPE_DIR_MARGIN < 0.25){
-	console.log("swipe down");
+        console.log("swipe down");
       } else {
         console.log("swipe with unclear direction, should warn user TODO.");
       }
@@ -137,125 +148,46 @@ function setGazeIndicator(x, y) {
 const GAZE_AVERAGING_FACTOR = 0.2;
 const GAZE_SWITCH_THRESHOLD = 0.8;
 var recentAverageGaze = 1;
-var currentNormalizedGaze = 1;
 
 function averageGaze(current){
   if(autoTurn == AUTOTURNON){
     recentAverageGaze = recentAverageGaze * (1 - GAZE_AVERAGING_FACTOR) + current * GAZE_AVERAGING_FACTOR;
-    if(Math.abs(currentNormalizedGaze-recentAverageGaze) > GAZE_SWITCH_THRESHOLD){
-      if(currentNormalizedGaze == 1){
-        currentNormalizedGaze = 0;
+    if(Math.abs(getCurrentNormalizedGaze()-recentAverageGaze) > GAZE_SWITCH_THRESHOLD){
+      if(getCurrentNormalizedGaze() == 1){
         eyeDown();
       } else {
-        currentNormalizedGaze = 1;
         eyeUp();
       }
     }
   }
 }
-
-/* sheet music highlight border upper/lower/transition ****************/
-const TRANSITIONDURATION = 2; /* in seconds. */
-
-const HIGHLIGHTUPPER = 0;
-const HIGHLIGHTUPPEROUT = 1;
-const HIGHLIGHTLOWERIN = 2;
-const HIGHLIGHTLOWER = 3;
-const HIGHLIGHTLOWEROUT = 4;
-const HIGHLIGHTUPPERIN = 5;
-var highlightState = HIGHLIGHTUPPER;
-
-var scheduledStateTransition;
-
-function enableHighlight(which, transition){
-  document.getElementById("sheet-music-border-" + which).style["transition-duration"] = transition + "s";
-  document.getElementById("sheet-music-border-" + which).style.border = "3px solid #9f9";
-}
-
-function disableHighlight(which, transition){
-  document.getElementById("sheet-music-border-" + which).style["transition-duration"] = transition + "s";
-  document.getElementById("sheet-music-border-" + which).style.border = "3px solid transparent";
-}
-
-function transitionUpDown1(){
-  highlightState = HIGHLIGHTLOWERIN;
-  enableHighlight("lower", TRANSITIONDURATION);
-  scheduledStateTransition = window.setTimeout(transitionUpDown2, TRANSITIONDURATION*1000);
-}
-
-function transitionUpDown2(){
-  highlightState = HIGHLIGHTLOWER;
-  upDownFinished();
-}
-
-function transitionDownUp1(){
-  highlightState = HIGHLIGHTUPPERIN;
-  enableHighlight("upper", TRANSITIONDURATION);
-  scheduledStateTransition = window.setTimeout(transitionDownUp2, TRANSITIONDURATION*1000);
-}
-
-function transitionDownUp2(){
-  highlightState = HIGHLIGHTUPPER;
-  downUpFinished();
-}
-
-function highlightToLower(){
-  if(highlightState == HIGHLIGHTLOWER){
-    console.log("error: was already in lower state");
-  } else if(highlightState == HIGHLIGHTLOWERIN || highlightState == HIGHLIGHTUPPEROUT){
-    /* finish animation prematurely */
-    highlightState = HIGHLIGHTLOWER;
-    enableHighlight("lower", 0);
-    disableHighlight("upper", 0);
-    window.clearTimeout(scheduledStateTransition);
-    upDownFinished();
-  } else if(highlightState == HIGHLIGHTUPPER){
-    highlightState = HIGHLIGHTUPPEROUT;
-    disableHighlight("upper", TRANSITIONDURATION);
-    scheduledStateTransition = window.setTimeout(transitionUpDown1, TRANSITIONDURATION*1000);
-    stateUpper = STANDARD_TRANS_OUT; // TODO
-    stateLower = STANDARD_TRANS_IN; // TODO
-  } else {
-  // TODO
+function getCurrentNormalizedGaze(){
+  if(highlightState == HIGHLIGHT_UPPER){
+    return(1);
+  } else if(highlightState == HIGHLIGHT_LOWER){
+    return(0);
   }
 }
 
-function highlightToUpper(){
-  if(highlightState == HIGHLIGHTUPPER){
-    console.log("error: was already in upper state");
-  } else if(highlightState == HIGHLIGHTLOWEROUT || highlightState == HIGHLIGHTUPPERIN){
-    /* finish animation prematurely */
-    highlightState = HIGHLIGHTUPPER;
-    disableHighlight("lower", 0);
-    enableHighlight("upper", 0);
-    window.clearTimeout(scheduledStateTransition);
-    downUpFinished();
-  } else if(highlightState == HIGHLIGHTLOWER){
-    highlightState = HIGHLIGHTLOWEROUT;
-    disableHighlight("lower", TRANSITIONDURATION);
-    scheduledStateTransition = window.setTimeout(transitionDownUp1, TRANSITIONDURATION*1000);
-    stateLower = STANDARD_TRANS_OUT; // TODO
-    stateUpper = STANDARD_TRANS_IN; // TODO
-  } else if(highlightState == HIGHLIGHTLOWERIN || highlightState == HIGHLIGHTUPPEROUT){
-    /* we are animating out of upper, abort */
-	  // TODO
-  }
-}
 /* display pdf, set up ************************************************/
-let loadPDF =   pdfjsLib.getDocument("./assets/images/music.pdf"),
-                pdfDoc = null;
+var pageNumber = {"upper" : 1, "lower" : 2};
+var loadPDF = pdfjsLib.getDocument("./assets/images/music.pdf");
+var pdfDoc = null;
 
 loadPDF.promise.then(pdf => {
     pdfDoc = pdf;
-    displayPage("upper", pageNumberUpper);
-    displayPage("lower", pageNumberLower);
+    displayPage("upper", 1);
+    displayPage("lower", 2);
     enableEyeGaze();
 });
 
 /* adjust pages displayed *********************************************/
+
 function displayPage(where, number){
   $("#" + where + "-pdf").fadeOut(1000, function() {
     pdfDoc.getPage(number).then(page => {
+      console.log("set " + where + " page to " + number);
+      pageNumber[where] = number;
       let canvas = document.getElementById(where + "-pdf");
       canvas.height = canvas.clientHeight;
       canvas.width = canvas.clientWidth;
@@ -270,68 +202,142 @@ function displayPage(where, number){
   $("#" + where + "-pdf").fadeIn(1000);
 }
 
-function setPageUpper(number){
-  displayPage("upper", number);
-  pageNumberUpper = number;
-  console.log("set page upper: " + number);
+/* sheet music highlight border upper/lower/transition ****************/
+const TRANSITION_DURATION = 2; /* in seconds. */
+
+const HIGHLIGHT_UPPER = 0;
+const HIGHLIGHT_UPPER_OUT = 1;
+const HIGHLIGHT_LOWER_IN = 2;
+const HIGHLIGHT_LOWER = 3;
+const HIGHLIGHT_LOWER_OUT = 4;
+const HIGHLIGHT_UPPER_IN = 5;
+var highlightState = HIGHLIGHT_UPPER;
+
+var scheduledStateTransition;
+
+function enableHighlight(which, transition){
+  document.getElementById("sheet-music-border-" + which).style["transition-duration"] = transition + "s";
+  document.getElementById("sheet-music-border-" + which).style.border = "3px solid #9f9";
 }
-function setPageLower(number){
-  displayPage("lower", number);
-  pageNumberLower = number;
-  console.log("set page lower: " + number);
+
+function disableHighlight(which, transition){
+  document.getElementById("sheet-music-border-" + which).style["transition-duration"] = transition + "s";
+  document.getElementById("sheet-music-border-" + which).style.border = "3px solid transparent";
+}
+
+function highlightTo(where, step=0){
+  if(where == "upper"){
+    var target = HIGHLIGHT_UPPER;
+    var targetTrans1 = HIGHLIGHT_LOWER_OUT;
+    var targetTrans2 = HIGHLIGHT_UPPER_IN;
+    var start = HIGHLIGHT_LOWER;
+    var inProgress = [HIGHLIGHT_LOWER_IN, HIGHLIGHT_UPPER_OUT];
+    var otherDir = [HIGHLIGHT_LOWER_OUT, HIGHLIGHT_UPPER_IN];
+  } else if(where == "lower"){
+    var target = HIGHLIGHT_LOWER;
+    var targetTrans1 = HIGHLIGHT_UPPER_OUT;
+    var targetTrans2 = HIGHLIGHT_LOWER_IN;
+    var start = HIGHLIGHT_UPPER;
+    var inProgress = [HIGHLIGHT_LOWER_OUT, HIGHLIGHT_UPPER_IN];
+    var otherDir = [HIGHLIGHT_LOWER_IN, HIGHLIGHT_UPPER_OUT];
+  } else {
+    console.log("Wrong argument to highlightTo");
+  }
+
+  if(step == 0){
+    /* first call */
+    if(highlightState == target){
+      console.log("error: was already in " + where + " state");
+    } else if(inProgress.includes(highlightState)){
+      /* finish animation prematurely */
+      highlightState = target;
+      enableHighlight(where, 0);
+      disableHighlight(whereNot(where), 0);
+      window.clearTimeout(scheduledStateTransition);
+      transitionFinished(where);
+    } else if(highlightState == start){
+      /* initiate animated change */
+      highlightState = targetTrans1;
+      disableHighlight(whereNot(where), TRANSITION_DURATION);
+      scheduledStateTransition = window.setTimeout(highlightTo(where, 1), TRANSITION_DURATION*1000);
+      transitionStarted(where);
+    } else {
+      /* we are animating out of target, abort */
+      window.clearTimeout(scheduledStateTransition);
+      enableHighlight(where, 0);
+      disableHighlight(whereNot(where), 0);
+      transitionAbortedStayed(where);
+    }
+  } else if(step == 1){
+    /* step 1 of animation */
+    highlightState = targetTrans2;
+    enableHighlight(where, TRANSITION_DURATION);
+    scheduledStateTransition = window.setTimeout(highlightTo(where, 2), TRANSITION_DURATION*1000);
+  } else if(step == 2){
+    /* step 2 of animation */
+    highlightState = target;
+    transitionFinished(where);
+  } else {
+    console.log("usage error highlightTo");
+  }
 }
 
 /* main control finite state machine **********************************/
-// TODO
-const STANDARD_BORDERED = 0;
-const STANDARD_TRANS_OUT = 1;
-const STANDARD_UNBORDERED = 2;
-const STANDARD_TRANS_IN = 3;
-const DANGLING = 4;
+var nextPageNumber;
+var nextPagePosition;
 
-/* need two instances of this machine, so two states */
-var stateUpper = STANDARD_BORDERED;
-var stateLower = STANDARD_UNBORDERED;
-var pageNumberUpper = 1;
-var pageNumberLower = 2;
-
-
-/* functions invoked when some condition for a state change holds */
-
-
-/* go one page back the ordinary way */
-function turnBack(){
-  if(stateUpper != DANGLING && stateLower != DANGLING){
-    if(false){
-      
-    }
+function turn(direction){
+  if(direction == "back"){
+    var steadyDown = HIGHLIGHT_UPPER;
+    var abortToUpper = [HIGHLIGHT_UPPER_OUT, HIGHLIGHT_LOWER_IN];
+    var steadyUp = HIGHLIGHT_LOWER;
+    var pageDiff = -1;
+    var pageUpdatedIfDown = "lower";
+  } else if(direction == "forward"){
+    var steadyDown = HIGHLIGHT_UPPER;
+    var abortToUpper = [HIGHLIGHT_UPPER_OUT, HIGHLIGHT_LOWER_IN];
+    var steadyUp = HIGHLIGHT_LOWER;
+    var pageDiff = 1;
+    var pageUpdatedIfDown = "upper";
+  } else {
+    console.log("usage error: turn()");
+  }
+  
+  if(highlightState == steadyDown){
+    console.log("steadyDown");
+    nextPageNumber = pageNumber[whereNot(pageUpdatedIfDown)] + pageDiff;
+    nextPagePosition = pageUpdatedIfDown;
+    highlightTo("lower");
+    highlightTo("lower");
+  } else if(abortToUpper.includes[highlightState]){
+    highlightTo("upper");
+  } else if(highlightState == steadyUp){
+    nextPageNumber = pageNumber[pageUpdatedIfDown] + pageDiff;
+    nextPagePosition = whereNot(pageUpdatedIfDown);
+    highlightTo("upper");
+    highlightTo("upper");
+  } else {
+    highlightTo("lower");
   }
 }
 function swipeUp(){}
 function swipeLeft(){}
 function swipeDown(){}
 function eyeUp(){
-  console.log("eye up");
-  highlightToUpper();
-  stateUpper = STANDARD_TRANS_IN;
-  stateLower = STANDARD_TRANS_OUT;
+  nextPageNumber = pageNumber["upper"] + 1;
+  nextPagePosition = "lower";
+  highlightTo("upper");
 }
 function eyeDown(){
-  console.log("eye down");
-  highlightToLower();
-  stateLower = STANDARD_TRANS_IN;
-  stateUpper = STANDARD_TRANS_OUT;
+  nextPageNumber = pageNumber["lower"] + 1;
+  nextPagePosition = "upper";
+  highlightTo("lower");
 }
-function upDownFinished(){
-  stateLower = STANDARD_BORDERED;
-  stateUpper = STANDARD_UNBORDERED;
-  setPageUpper(pageNumberLower + 1)
+function transitionFinished(where){
+  displayPage(nextPagePosition, nextPageNumber);
 }
-function downUpFinished(){
-  stateLower = STANDARD_UNBORDERED;
-  stateUpper = STANDARD_BORDERED;
-  setPageLower(pageNumberUpper + 1)
-}
+function transitionStarted(where){}
+function transitionAbortedStayed(where){}
 /* eye gaze input *****************************************************/
 
 function enableEyeGaze(){
@@ -350,23 +356,25 @@ function movePreview(){
     el.remove();
     destination.append(el); 
     el.style.position = "absolute"; 
-    el.style.height = destination.clientHeight; 
-    el.height = destination.clientHeight;
-    el.style.width = destination.clientWidth; 
-    el.width = destination.clientWidth;
     if(el.id == "webgazerFaceFeedbackBox"){
       el.style.top = destination.clientHeight / 4;
       el.style.left = destination.clientWidth / 4;
       el.style.height = destination.clientHeight / 2;
       el.style.width = destination.clientWidth / 2;
+    } else {
+      el.style.height = destination.clientHeight; 
+      el.height = destination.clientHeight;
+      el.style.width = destination.clientWidth; 
+      el.width = destination.clientWidth;
     }
   });
 }
 function eyeGazeHandler(data, elapsedTime){
+  // TODO: No fixed rate yet
   if (data == null) {
-    console.log("no prediction, maybe needs calibration?");
+//    console.log("no prediction, maybe needs calibration?");
   } else {
-    console.log(data.x + "," + data.y);
+//    console.log(data.x + "," + data.y);
     setGazeIndicator(data.x, data.y);
   }
 
