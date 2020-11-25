@@ -4,7 +4,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <meta http-equiv="Content-Script-Type" content="text/javascript">
 <style>
-#overlay {
+#overlay_ramis {
   position: fixed;
   display: none;
   width: 100%;
@@ -18,7 +18,7 @@
   cursor: pointer;
 }
 
-#text{
+#text_ramis{
   position: absolute;
   top: 40%;
   left: 50%;
@@ -130,8 +130,8 @@
 </head>
 <body>
 
-<div id="overlay">
-  <div id="text">Click on all Red ciricles 5 times to calibrate or <a onclick="off()" onmouseover="this.style.background='gray';" onmouseout="this.style.background='none';">skip</a></div>
+<div id="overlay_ramis">
+  <div id="text_ramis">Click on all Red ciricles 5 times to calibrate or <a onclick="off()" onmouseover="this.style.background='gray';" onmouseout="this.style.background='none';">skip</a></div>
   <div id="point1"></div>
   <div id="point2"></div>
   <div id="point3"></div>
@@ -150,16 +150,12 @@
 
 <script>
 function on() {
-  document.getElementById("overlay").style.display = "block";
+  document.getElementById("overlay_ramis").style.display = "block";
 }
 
 function off() {
-  document.getElementById("overlay").style.display = "none";
+  document.getElementById("overlay_ramis").style.display = "none";
 }
-function click(p) {
-  document.getElementById(p).style.display = "none";
-}
-
 </script>
    
 </body>
