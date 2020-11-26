@@ -296,6 +296,7 @@ div.overlay {
       background: red;
     }
 
+	
 #nav-bar {
 	width: 100%;
 	background-color: #F0F8FA;
@@ -305,6 +306,7 @@ div.overlay {
 	text-decoration: none;
 	list-style-type: none;
 }
+
 l#nav-bar-element {
 	display: inline;
 	padding-left: 6px;
