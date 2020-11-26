@@ -9,6 +9,25 @@ function whereNot(where){
     console.log("bad usesage: whereNot()");
   }
 }
+
+/* Toggle visibility of the menu and status bars */
+function toggleMenuStatus() {
+	var menu = document.getElementById("menu");
+	var status = document.getElementById("status");
+	
+	if(menu.style.visibility == "hidden"){
+		menu.style.visibility = "visible";
+	} else {
+		menu.style.visibility = "hidden";
+	}
+	
+	if(status.style.visibility == "hidden"){
+		status.style.visibility = "visible";
+	} else {
+		status.style.visibility = "hidden";
+	}
+}
+
 /* TOUCH INPUT ********************************************************/
 const SWIPE_THRESHOLD = 30; /* in pixels */
 const SWIPE_DIR_MARGIN = 1/16; /* angle, factor PI omitted */
