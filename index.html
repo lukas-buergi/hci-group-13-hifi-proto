@@ -5,12 +5,14 @@
   </head>
   <body>
     <div id="app-container">  
+		<!--
 		<ul class="nav-bar" id="menu">
 			<li class="nav-bar-element"><a href="#" class="active">Stop</a></li>
 			<li class="nav-bar-element"><a href="#">Restart</a></li>
 			<li class="nav-bar-element"><a href="#">Pause</a></li>
 			<li class="nav-bar-element"><a href="#">Continue</a></li>
 		</ul>
+		-->
 		<button id="fullscreen" onclick="document.documentElement.requestFullscreen();document.getElementById('fullscreen').hidden=true;" style="position:absolute">Open Fullscreen</button>
 		<div id="touch-capture"></div>
 		<div id="sheet-music-upper" class="sheet-music">
@@ -38,11 +40,13 @@
 	        <canvas id="lower-pdf"></canvas>
 		</div>
         <div id="sheet-music-border-lower" class="sheet-music-border"></div>
+		<!--
 		<ul class="nav-bar" id="status">
 				<li class="nav-bar-element">Recording in progress</li>
 				<li class="nav-bar-element">Time: 2min 10s</li>
 				<li class="nav-bar-element">Connection: 5/5</li>
 		</ul>
+		-->
       </div>
 		
 	</div>
