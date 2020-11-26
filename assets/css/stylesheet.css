@@ -296,7 +296,7 @@ div.overlay {
       background: red;
     }
 
-ul.nav-bar {
+#nav-bar {
 	width: 100%;
 	background-color: #F0F8FA;
 	color: black;
@@ -305,7 +305,7 @@ ul.nav-bar {
 	text-decoration: none;
 	list-style-type: none;
 }
-li.nav-bar-element {
+l#nav-bar-element {
 	display: inline;
 	padding-left: 6px;
 	padding-right: 6px;
