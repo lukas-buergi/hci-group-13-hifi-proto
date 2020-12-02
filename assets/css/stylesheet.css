@@ -296,8 +296,7 @@ div.overlay {
 }
 
 ul.nav-bar {
-	position: fixed;
-	width: 100%;
+	text-align: center;
 	height: auto;
 	background-color: #F0F8FA;
 	color: black;
