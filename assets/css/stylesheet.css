@@ -319,5 +319,7 @@ li.nav-bar-element {
 	display: inline;
 	padding-left: 6px;
 	padding-right: 6px;
+	font-family: sans-serif;
+	text-decoration: none;
 }
 	
