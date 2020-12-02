@@ -296,7 +296,9 @@ div.overlay {
 }
 
 ul.nav-bar {
+	position: fixed;
 	width: 100%;
+	height: auto;
 	background-color: #F0F8FA;
 	color: black;
 	padding: 6px;
@@ -305,7 +307,16 @@ ul.nav-bar {
 	list-style-type: none;
 }
 
+#menu {
+	top: 0;
+}
+
+#status {
+	bottom: 0;
+}
+
 li.nav-bar-element {
+	position: relative;
 	display: inline;
 	padding-left: 6px;
 	padding-right: 6px;
