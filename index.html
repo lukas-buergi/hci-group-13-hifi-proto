@@ -5,15 +5,16 @@
   </head>
   <body>
     <div id="app-container">  
-		<!--
 		<ul class="nav-bar" id="menu">
 			<li class="nav-bar-element"><a href="#" class="active">Stop</a></li>
 			<li class="nav-bar-element"><a href="#">Restart</a></li>
 			<li class="nav-bar-element"><a href="#">Pause</a></li>
 			<li class="nav-bar-element"><a href="#">Continue</a></li>
+			<li class="nav-bar-element" onclick="onclick="document.documentElement.requestFullscreen();">Fullscreen</li>
 		</ul>
-		-->
+		<!--
 		<button id="fullscreen" onclick="document.documentElement.requestFullscreen();document.getElementById('fullscreen').hidden=true;" style="position:absolute">Open Fullscreen</button>
+		-->
 		<div id="touch-capture"></div>
 		<div id="sheet-music-upper" class="sheet-music">
         <div id="sheet-music-upper-content">
@@ -40,19 +41,21 @@
 	        <canvas id="lower-pdf"></canvas>
 		</div>
         <div id="sheet-music-border-lower" class="sheet-music-border"></div>
-		<!--
-		<ul class="nav-bar" id="status">
-				<li class="nav-bar-element">Recording in progress</li>
-				<li class="nav-bar-element">Time: 2min 10s</li>
-				<li class="nav-bar-element">Connection: 5/5</li>
-		</ul>
-		-->
+		
       </div>
+	<ul class="nav-bar" id="status">
+		<li class="nav-bar-element">Recording in progress</li>
+		<li class="nav-bar-element">Time: 2min 10s</li>
+		<li class="nav-bar-element">Connection: 5/5</li>
+	</ul>
 		
 	</div>
 
 <div id="overlay_ramis">
-  <div id="text_ramis">Click on all Red ciricles 5 times to calibrate or <a onclick="off()" onmouseover="this.style.background='gray';" onmouseout="this.style.background='none';">skip</a></div>
+  <div id="text_ramis">
+    To calibrate the eye gaze detection system, stare at and click on the red circles until the moving red dot acceptably follows your eye gaze. Then click on the button to continue. <br>
+    <button onclick="off();">Finished calibrating.</button>
+  </div>
   <div id="point1"></div>
   <div id="point2"></div>
   <div id="point3"></div>
