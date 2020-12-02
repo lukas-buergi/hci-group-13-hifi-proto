@@ -297,6 +297,8 @@ div.overlay {
 }
 
 ul.nav-bar {
+	position: absolute;
+	z-index: 1;
 	width: 100%;
 	background-color: #F0F8FA;
 	color: black;
@@ -307,6 +309,8 @@ ul.nav-bar {
 }
 
 li.nav-bar-element {
+	position: absolute;
+	z-index: 1;
 	display: inline;
 	padding-left: 6px;
 	padding-right: 6px;
