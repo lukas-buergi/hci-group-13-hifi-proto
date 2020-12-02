@@ -11,20 +11,31 @@ function whereNot(where){
 }
 
 /* Toggle visibility of the menu and status bars */
-function toggleMenuStatus() {
+function toggleMenu() {
 	var menu = document.getElementById("menu");
-	var status = document.getElementById("status");
 	
 	if(menu.style.visibility == "hidden"){
 		menu.style.visibility = "visible";
 	} else {
 		menu.style.visibility = "hidden";
 	}
-	
+}
+
+function toggleStatus() {
+	var status = document.getElementById("status");
+
 	if(status.style.visibility == "hidden"){
 		status.style.visibility = "visible";
 	} else {
 		status.style.visibility = "hidden";
+	}
+}
+
+function toggleFullscreen() {
+	if(document.fullscreenElement){
+		document.exitFullscreen();
+	} else {
+		document.documentElement.requestFullscreen();
 	}
 }
 

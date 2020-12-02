@@ -151,9 +151,14 @@ div.overlay {
   background: #eee;
 }
 #overlay-1 {
-  top: 0;
-  left: 0;
-  border-style: none solid solid none;
+	top: 0;
+	left: 0;
+	border-style: none solid;
+	background-color: #F0F8FA;
+	color: black;
+	margin: 0;
+	text-decoration: none;
+	font-family: sans-serif;
 }
 #overlay-2 {
   top: 0;
@@ -164,9 +169,11 @@ div.overlay {
     width: 30px;
   }
 #overlay-3 {
-  bottom: 0;
-  left: 0;
-  border-style: solid solid none none;
+	bottom: 0;
+	left: 0;
+	border-style: solid solid;
+	text-decoration: none;
+	font-family: sans-serif;
 }
 #overlay-4 {
   bottom: 0;
@@ -185,17 +192,20 @@ div.overlay {
   background-color: rgba(0,0,0,0.8);
   z-index: 2;
   cursor: pointer;
+  text-align: center;
 }
 
 #text_ramis{
   position: absolute;
-  top: 40%;
+  top: 30%;
   left: 50%;
-  font-size: 50px;
+  font-size: 20px;
+  font-family: sans-serif;
   color: white;
   transform: translate(-50%,-50%);
   -ms-transform: translate(-50%,-50%);
 }
+
 #point1 {
   position: absolute;
   top: 0%;
@@ -297,22 +307,46 @@ div.overlay {
 }
 
 ul.nav-bar {
-	position: absolute;
-	z-index: 1;
-	width: 100%;
+	text-align: center;
+	height: auto;
 	background-color: #F0F8FA;
 	color: black;
-	padding: 6px;
 	margin: 0;
 	text-decoration: none;
 	list-style-type: none;
+	z-index: 2;
+	position: absolute;
+	left: 0%;
+	display: block;
+	width: 100%;
+	padding-left: 0;
+}
+
+#menu {
+	top: 0;
+}
+
+#status {
+	bottom: 0;
 }
 
 li.nav-bar-element {
-	position: absolute;
-	z-index: 1;
-	display: inline;
-	padding-left: 6px;
-	padding-right: 6px;
+	position: relative;
+	display: inline-block;
+	font-family: sans-serif;
+	color: black;
+	padding: 6px;
+	padding-left: 18px;
+	padding-right: 18px;
+	margin-left: 0;
 }
-	
+
+a:link, a:visited {
+	text-decoration: none;
+	border: none;
+	color: black;
+}
+
+li.nav-bar-element:hover {
+	background-color: #E5E5E5;
+}
