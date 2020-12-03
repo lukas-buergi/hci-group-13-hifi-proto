@@ -193,13 +193,21 @@ function setGazeIndicator(x, y) {
 }
 
 /* evaluate automatic page turn condition *****************************/
-const GAZE_AVERAGING_FACTOR = 0.2;
-const GAZE_SWITCH_THRESHOLD = 0.8;
+const GAZE_AVERAGING_FACTOR = 0.2; // config parameter
+const GAZE_SWITCH_THRESHOLD = 0.8; // config parameter
+const GAZE_REFERENCE_FREQUENCY = 6; // Hz, not meant to be changed
 var recentAverageGaze = 1;
+var lastGazeTime = new Date().getTime();
 
 function averageGaze(current){
   if(autoTurn == AUTOTURNON){
-    recentAverageGaze = recentAverageGaze * (1 - GAZE_AVERAGING_FACTOR) + current * GAZE_AVERAGING_FACTOR;
+    let newGazeTime = new Date().getTime();
+    let tdiff = newGazeTime - lastGazeTime; // ms
+    lastGazeTime = newGazeTime;
+    tdiff = tdiff / 1000.0; // s
+    let trel = tdiff / (1.0 / GAZE_REFERENCE_FREQUENCY); // fraction of reference period that passed since last time
+    let oldDataWeight = Math.pow(1-GAZE_AVERAGING_FACTOR, trel);
+    recentAverageGaze = recentAverageGaze * oldDataWeight + current * (1-oldDataWeight);
     if(Math.abs(getCurrentNormalizedGaze()-recentAverageGaze) > GAZE_SWITCH_THRESHOLD){
       if(getCurrentNormalizedGaze() == 1){
         eyeDown();
@@ -417,8 +425,8 @@ function movePreview(){
     }
   });
 }
+
 function eyeGazeHandler(data, elapsedTime){
-  // TODO: No fixed rate yet
   if (data == null) {
 //    console.log("no prediction, maybe needs calibration?");
   } else {
