@@ -6,7 +6,7 @@ function whereNot(where){
   } else if (where == "lower"){
     return("upper");
   } else {
-    console.log("bad usesage: whereNot()");
+    console.log("bad useage: whereNot()");
   }
 }
 
@@ -60,9 +60,9 @@ function startStopAction() {
 /* TOUCH INPUT ********************************************************/
 const SWIPE_THRESHOLD = 30; /* in pixels */
 const SWIPE_DIR_MARGIN = 1/16; /* angle, factor PI omitted */
-
 const IDLE = 0;
 const TENTATIVE = 1;
+
 var touchState = IDLE;
 var touchPos = {x:0, y:0};
 
@@ -111,6 +111,7 @@ function process_touchstart(ev) {
 }
 
 const touchCapture = document.getElementById("touch-capture");
+
 touchCapture.addEventListener('touchstart', process_touchstart, false);
 touchCapture.addEventListener('touchcancel', process_touchend, false);
 touchCapture.addEventListener('touchend', process_touchend, false);
@@ -118,6 +119,7 @@ touchCapture.addEventListener('touchend', process_touchend, false);
 /* pause/unpause eye gaze based auto page turn ************************/
 const AUTOTURNON = 0;
 const AUTOTURNOFF = 1;
+
 var autoTurn = AUTOTURNON;
 
 function autoTurnToggle() {
@@ -138,6 +140,7 @@ const EYEGAZETOP = 1;
 const EYEGAZEBOT = -1;
 const EYEGAZEACTIVE = "./assets/images/eyeActive.svg.png";
 const EYEGAZEINACTIVE = "./assets/images/eyeInactive.svg.png";
+
 var eyeGazeIndicator = EYEGAZENO;
 
 function eyeGazeSetTop() {
@@ -164,10 +167,36 @@ function eyeGazeSetNone() {
 
 /* process eye gaze position into upper/lower *************************/
 const EYE_GAZE_BORDER = 0.05; // config parameter
+/* const SCREEN_HEIGHT = screen.height; */
+/* const SCREEN_WIDTH = screen.width; */
 
 var currentGaze;
+var flagPageTurned = false;
+var gatheredData = [("Elapsed Time,Absolute x coordinate,Absolute y coordinate,eyeGazePdfUpperRect.x,eyeGazePdfUpperRect.y,"
+  + "eyeGazePdfUpperRect.height,eyeGazePdfUpperRect.width,eyeGazePdfLowerRect.x,eyeGazePdfLowerRect.y,"
+  + "eyeGazePdfLowerRect.height,eyeGazePdfLowerRect.width,upper page number,lower page number")];
+/* var gatheredData = ["Elapsed Time,Relative x coordinate,Relative y coordinate,upper page number,lower page number"]; */
 
-function setGazeIndicator(x, y) {
+function save(filename, data) {
+  let csv = "";
+  data.forEach(el => {
+    csv += el + "\n";
+  });
+  var blob = new Blob([csv], {type: 'text/csv'});
+  if(window.navigator.msSaveOrOpenBlob) {
+      window.navigator.msSaveBlob(blob, filename);
+  }
+  else{
+      var elem = window.document.createElement('a');
+      elem.href = window.URL.createObjectURL(blob);
+      elem.download = filename;        
+      document.body.appendChild(elem);
+      elem.click();        
+      document.body.removeChild(elem);
+  }
+}
+
+function setGazeIndicator(x, y, elapsedTime) {
   // need to do those calculations every time to react to resizing
   let eyeGazeAppRect = document.getElementById("app-container").getBoundingClientRect();
   let eyeGazePdfUpperRect = document.getElementById("upper-pdf").getBoundingClientRect();
@@ -191,12 +220,24 @@ function setGazeIndicator(x, y) {
   } else {
     eyeGazeSetNone();
   }
+
+  if(flagPageTurned){
+    /* let newEntry = (elapsedTime) + "," + (x/SCREEN_WIDTH) + "," + (y/SCREEN_HEIGHT) + "," 
+      + pageNumber["upper"] + "," + pageNumber["lower"]; */ /* relative x, y coordinates */
+    let newEntry = elapsedTime + "," + x + "," + y + "," + eyeGazePdfUpperRect.x + "," 
+      + eyeGazePdfUpperRect.y + "," + eyeGazePdfUpperRect.height + "," + eyeGazePdfUpperRect.width + "," 
+      + eyeGazePdfLowerRect.x + "," + eyeGazePdfLowerRect.y + "," + eyeGazePdfLowerRect.height + "," 
+      + eyeGazePdfLowerRect.width + "," + pageNumber["upper"] + "," + pageNumber["lower"];
+    console.log(newEntry);
+    gatheredData.push(newEntry);
+  }
 }
 
 /* evaluate automatic page turn condition *****************************/
 const GAZE_AVERAGING_FACTOR = 0.2; // config parameter
 const GAZE_SWITCH_THRESHOLD = 0.8; // config parameter
 const GAZE_REFERENCE_FREQUENCY = 6; // Hz, not meant to be changed
+
 var recentAverageGaze = 1;
 var lastGazeTime = new Date().getTime();
 
@@ -246,13 +287,13 @@ function displayPage(where, number){
     pdfDoc.getPage(number).then(page => {
       console.log("set " + where + " page to " + number);
       pageNumber[where] = number;
-      if(number >= 7 && number < 87) {
-        FLAG_PAGE_TURNED = true;
+      if(number >= 7 && number < 10/* 87 */) {
+        flagPageTurned = true;
       }else{
-        if(FLAG_PAGE_TURNED) {
-          save("gathered_data.csv", gathered_data);
+        if(flagPageTurned) {
+          save("gatheredData.csv", gatheredData);
         }
-        FLAG_PAGE_TURNED = false;
+        flagPageTurned = false;
       }
       let canvas = document.getElementById(where + "-pdf");
       canvas.height = canvas.clientHeight;
@@ -270,15 +311,14 @@ function displayPage(where, number){
 
 /* sheet music highlight border upper/lower/transition ****************/
 const TRANSITION_DURATION = 2; /* in seconds. */
-
 const HIGHLIGHT_UPPER = 0;
 const HIGHLIGHT_UPPER_OUT = 1;
 const HIGHLIGHT_LOWER_IN = 2;
 const HIGHLIGHT_LOWER = 3;
 const HIGHLIGHT_LOWER_OUT = 4;
 const HIGHLIGHT_UPPER_IN = 5;
-var highlightState = HIGHLIGHT_UPPER;
 
+var highlightState = HIGHLIGHT_UPPER;
 var scheduledStateTransition;
 
 function enableHighlight(which, transition){
@@ -386,32 +426,41 @@ function turn(direction){
     highlightTo("lower");
   }
 }
+
 function swipeUp(){}
+
 function swipeLeft(){}
+
 function swipeDown(){}
+
 function eyeUp(){
   nextPageNumber = pageNumber["upper"] + 1;
   nextPagePosition = "lower";
   highlightTo("upper");
 }
+
 function eyeDown(){
   nextPageNumber = pageNumber["lower"] + 1;
   nextPagePosition = "upper";
   highlightTo("lower");
 }
+
 function transitionFinished(where){
   displayPage(nextPagePosition, nextPageNumber);
 }
-function transitionStarted(where){}
-function transitionAbortedStayed(where){}
-/* eye gaze input *****************************************************/
 
+function transitionStarted(where){}
+
+function transitionAbortedStayed(where){}
+
+/* eye gaze input *****************************************************/
 function enableEyeGaze(){
   webgazer.params.showVideoPreview = true;
   webgazer.setGazeListener(eyeGazeHandler).begin();
   /* might only work a bit later, so wait random amount */
   window.setTimeout(movePreview, 5000);
 }
+
 function movePreview(){
   const destination = document.getElementById("video-1");
   destination.innerHTML = "";
@@ -436,51 +485,25 @@ function movePreview(){
   });
 }
 
-var FLAG_PAGE_TURNED = false;
-var SCREEN_HEIGHT = screen.height;
-var SCREEN_WIDTH = screen.width;
-var gathered_data = ["Elapsed Time,Relative x coordinate,Relative y coordinate,upper page number,lower page number"];
-
-function save(filename, data) {
-  let csv = "";
-  data.forEach(el => {
-    csv += el + "\n";
-  });
-  var blob = new Blob([csv], {type: 'text/csv'});
-  if(window.navigator.msSaveOrOpenBlob) {
-      window.navigator.msSaveBlob(blob, filename);
-  }
-  else{
-      var elem = window.document.createElement('a');
-      elem.href = window.URL.createObjectURL(blob);
-      elem.download = filename;        
-      document.body.appendChild(elem);
-      elem.click();        
-      document.body.removeChild(elem);
-  }
-}
-
 function eyeGazeHandler(data, elapsedTime){
   if (data == null) {
-    // console.log("no prediction, maybe needs calibration?");
+    /* console.log("no prediction, maybe needs calibration?"); */
   } else {
-    // console.log(data.x + "," + data.y);
-    if(FLAG_PAGE_TURNED){
-      let new_entry = (elapsedTime) + "," + (data.x/SCREEN_WIDTH) + "," + (data.y/SCREEN_HEIGHT) + "," + pageNumber["upper"] + "," + pageNumber["lower"];
-      console.log(new_entry);
-      gathered_data.push(new_entry);
-    }
-    setGazeIndicator(data.x, data.y);
+    /* console.log(data.x + "," + data.y); */
+    setGazeIndicator(data.x, data.y, elapsedTime);
   }
 }
 
 /* fake eye gaze with mouse, defined sampling rate ********************/
 const SAMPLINGRATE = 5 /* Hz */
+
 var delayElapsed = true;
+
 function enableMouseFakeEye(){
   console.log("Enabled faking eye gaze with mouse");
   document.getElementById("app-container").addEventListener('mousemove', mousemoveSampler);
 }
+
 function mousemoveSampler(ev){
   if(delayElapsed){
     /* even though this would be broken parallelism in most languages,
