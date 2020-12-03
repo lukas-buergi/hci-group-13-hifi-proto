@@ -163,29 +163,30 @@ function eyeGazeSetNone() {
 }
 
 /* process eye gaze position into upper/lower *************************/
-const EYEGAZEBORDER = 0.02;
-const EYEGAZEMIDDLEFRACTION = 0.2;
-const EYEGAZEBOTTOMFRACTION = (1 - EYEGAZEMIDDLEFRACTION) / 2;
-const EYEGAZETOPFRACTION = EYEGAZEBOTTOMFRACTION;
-const EYEGAZEWIDTH = document.getElementById("app-container").getBoundingClientRect().width;
-const EYEGAZEHEIGHT = document.getElementById("app-container").getBoundingClientRect().height;
-const EYEGAZEACTIVEWIDTH = EYEGAZEWIDTH * (1 - 2 * EYEGAZEBORDER);
-const EYEGAZEACTIVEHEIGHT = EYEGAZEHEIGHT * (1 - 2 * EYEGAZEBORDER);
-const EYEGAZEXMIN = document.getElementById("app-container").getBoundingClientRect().x + EYEGAZEWIDTH * EYEGAZEBORDER;
-const EYEGAZEYMIN = document.getElementById("app-container").getBoundingClientRect().y + EYEGAZEHEIGHT * EYEGAZEBORDER;
-const EYEGAZEXMAX = EYEGAZEXMIN + EYEGAZEACTIVEWIDTH; 
-const EYEGAZEYMAX = EYEGAZEYMIN + EYEGAZEACTIVEHEIGHT;
+const EYE_GAZE_BORDER = 0.05; // config parameter
 
 var currentGaze;
 
 function setGazeIndicator(x, y) {
-  if(EYEGAZEXMIN < x && x < EYEGAZEXMAX && EYEGAZEYMIN < y && y < EYEGAZEYMAX){
-    if(y < EYEGAZEYMIN + EYEGAZEACTIVEHEIGHT * EYEGAZETOPFRACTION){
+  // need to do those calculations every time to react to resizing
+  let eyeGazeAppRect = document.getElementById("app-container").getBoundingClientRect();
+  let eyeGazePdfUpperRect = document.getElementById("upper-pdf").getBoundingClientRect();
+  let eyeGazePdfLowerRect = document.getElementById("lower-pdf").getBoundingClientRect();
+  let eyeGazeBorderPixels = EYE_GAZE_BORDER * eyeGazePdfUpperRect.height;
+  let eyeGazeXMin = eyeGazeAppRect.x + eyeGazeBorderPixels;
+  let eyeGazeXMax = eyeGazeAppRect.x + eyeGazeAppRect.width - eyeGazeBorderPixels;
+  let eyeGazeY1Min = eyeGazePdfUpperRect.y + eyeGazeBorderPixels;
+  let eyeGazeY1Max = eyeGazePdfUpperRect.y + eyeGazePdfUpperRect.height - eyeGazeBorderPixels;
+  let eyeGazeY2Min = eyeGazePdfLowerRect.y + eyeGazeBorderPixels;
+  let eyeGazeY2Max = eyeGazePdfLowerRect.y + eyeGazePdfUpperRect.height - eyeGazeBorderPixels;
+  
+  if(eyeGazeXMin < x && x < eyeGazeXMax){
+    if(eyeGazeY1Min < y && y < eyeGazeY1Max){
       eyeGazeSetTop();
-    } else if(y < EYEGAZEYMIN + EYEGAZEACTIVEHEIGHT * (EYEGAZETOPFRACTION + EYEGAZEMIDDLEFRACTION)){
-      eyeGazeSetNone();
-    } else {
+    } else if(eyeGazeY2Min < y && y < eyeGazeY2Max){
       eyeGazeSetBottom();
+    } else {
+      eyeGazeSetNone();
     }
   } else {
     eyeGazeSetNone();
@@ -235,6 +236,7 @@ loadPDF.promise.then(pdf => {
     displayPage("upper", 1);
     displayPage("lower", 2);
     enableEyeGaze();
+    //enableMouseFakeEye();
 });
 
 /* adjust pages displayed *********************************************/
@@ -440,6 +442,7 @@ function eyeGazeHandler(data, elapsedTime){
 const SAMPLINGRATE = 5 /* Hz */
 var delayElapsed = true;
 function enableMouseFakeEye(){
+  console.log("Enabled faking eye gaze with mouse");
   document.getElementById("app-container").addEventListener('mousemove', mousemoveSampler);
 }
 function mousemoveSampler(ev){
