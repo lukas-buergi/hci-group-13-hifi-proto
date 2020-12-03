@@ -287,7 +287,7 @@ function displayPage(where, number){
     pdfDoc.getPage(number).then(page => {
       console.log("set " + where + " page to " + number);
       pageNumber[where] = number;
-      if(number >= 7 && number < 10/* 87 */) {
+      if(number >= 7 && number < 87) {
         flagPageTurned = true;
       }else{
         if(flagPageTurned) {
