@@ -6,13 +6,10 @@
   <body>
     <div id="app-container">  
 		<ul class="nav-bar" id="menu">
-			<!--
-			<li class="nav-bar-element"><a href="#">Stop</a></li>
-			<li class="nav-bar-element"><a href="#">Restart</a></li>
-			<li class="nav-bar-element"><a href="#">Pause</a></li>
-			-->
 			<li class="nav-bar-element"><a onclick="on()" href="#">Calibrate</a></li>
 			<li class="nav-bar-element"><a onclick="toggleFullscreen()" href="#">Fullscreen</a></li>
+			<li class="nav-bar-element">Load Sheet Music</li>
+			<li class="nav-bar-element"><a onclick="startStopAction()" id="start-stop" href="#">Start</a></li>
 		</ul>
 		<!--
 		<button id="fullscreen" onclick="document.documentElement.requestFullscreen();document.getElementById('fullscreen').hidden=true;" style="position:absolute">Open Fullscreen</button>
@@ -29,11 +26,11 @@
 			<div id="video-2" class="video"><img src="./assets/images/video-placeholder.png"></img></div>
 			<div id="video-3" class="video"><img src="./assets/images/video-placeholder.png"></img></div>
 			<div id="video-4" class="video"><img src="./assets/images/video-placeholder.png"></img></div>
-        <div id="overlay-1" class="overlay" onclick="toggleMenu()">Show Menu</div>
+        <div id="overlay-1" class="overlay" onclick="toggleMenu()">Hide Menu</div>
         <div id="overlay-2" class="overlay">
 			<img src="./assets/images/eyeInactive.svg.png"></img>
 		</div>
-        <div id="overlay-3" class="overlay" onclick="toggleStatus()">Show Status</div>
+        <div id="overlay-3" class="overlay" onclick="toggleStatus()">Hide Status</div>
         <div id="overlay-4" class="overlay">
 			<img src="./assets/images/eyeInactive.svg.png"></img>
 	    </div>

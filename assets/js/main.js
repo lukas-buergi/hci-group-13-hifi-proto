@@ -16,8 +16,10 @@ function toggleMenu() {
 	
 	if(menu.style.visibility == "hidden"){
 		menu.style.visibility = "visible";
+		document.getElementById("overlay-1").innerHTML = "Hide Menu";
 	} else {
 		menu.style.visibility = "hidden";
+		document.getElementById("overlay-1").innerHTML = "Show Menu";
 	}
 }
 
@@ -26,16 +28,32 @@ function toggleStatus() {
 
 	if(status.style.visibility == "hidden"){
 		status.style.visibility = "visible";
+		document.getElementById("overlay-3").innerHTML = "Hide Status";
 	} else {
 		status.style.visibility = "hidden";
+		document.getElementById("overlay-3").innerHTML = "Show Status";
 	}
 }
 
+/* Toggle fullscreen (button in menu) */
 function toggleFullscreen() {
 	if(document.fullscreenElement){
 		document.exitFullscreen();
 	} else {
 		document.documentElement.requestFullscreen();
+	}
+}
+
+/* Start/Stop action */
+function startStopAction() {
+	var btn = document.getElementById("start-stop")
+	
+	if(btn.innerHTML == "Start"){
+		btn.innerHTML = "Stop";
+		autoTurnToggle();
+	} else {
+		btn.innerHTML = "Start";
+		autoTurnToggle();
 	}
 }
 
