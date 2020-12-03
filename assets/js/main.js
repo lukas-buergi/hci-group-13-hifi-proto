@@ -246,6 +246,14 @@ function displayPage(where, number){
     pdfDoc.getPage(number).then(page => {
       console.log("set " + where + " page to " + number);
       pageNumber[where] = number;
+      if(number >= 7 && number < 87) {
+        FLAG_PAGE_TURNED = true;
+      }else{
+        if(FLAG_PAGE_TURNED) {
+          save("gathered_data.csv", gathered_data);
+        }
+        FLAG_PAGE_TURNED = false;
+      }
       let canvas = document.getElementById(where + "-pdf");
       canvas.height = canvas.clientHeight;
       canvas.width = canvas.clientWidth;
@@ -428,14 +436,42 @@ function movePreview(){
   });
 }
 
+var FLAG_PAGE_TURNED = false;
+var SCREEN_HEIGHT = screen.height;
+var SCREEN_WIDTH = screen.width;
+var gathered_data = ["Elapsed Time,Relative x coordinate,Relative y coordinate,upper page number,lower page number"];
+
+function save(filename, data) {
+  let csv = "";
+  data.forEach(el => {
+    csv += el + "\n";
+  });
+  var blob = new Blob([csv], {type: 'text/csv'});
+  if(window.navigator.msSaveOrOpenBlob) {
+      window.navigator.msSaveBlob(blob, filename);
+  }
+  else{
+      var elem = window.document.createElement('a');
+      elem.href = window.URL.createObjectURL(blob);
+      elem.download = filename;        
+      document.body.appendChild(elem);
+      elem.click();        
+      document.body.removeChild(elem);
+  }
+}
+
 function eyeGazeHandler(data, elapsedTime){
   if (data == null) {
-//    console.log("no prediction, maybe needs calibration?");
+    // console.log("no prediction, maybe needs calibration?");
   } else {
-//    console.log(data.x + "," + data.y);
+    // console.log(data.x + "," + data.y);
+    if(FLAG_PAGE_TURNED){
+      let new_entry = (elapsedTime) + "," + (data.x/SCREEN_WIDTH) + "," + (data.y/SCREEN_HEIGHT) + "," + pageNumber["upper"] + "," + pageNumber["lower"];
+      console.log(new_entry);
+      gathered_data.push(new_entry);
+    }
     setGazeIndicator(data.x, data.y);
   }
-
 }
 
 /* fake eye gaze with mouse, defined sampling rate ********************/
