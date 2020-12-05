@@ -281,13 +281,20 @@ loadPDF.promise.then(pdf => {
 });
 
 /* adjust pages displayed *********************************************/
+var startPageNumber = 7;
+var endPageNumber = 87;
+
+function setBoundsForGatheringData(){
+  startPageNumber = document.getElementById("start-page-number").value;
+  endPageNumber = document.getElementById("end-page-number").value;
+}
 
 function displayPage(where, number){
   $("#" + where + "-pdf").fadeOut(1000, function() {
     pdfDoc.getPage(number).then(page => {
       console.log("set " + where + " page to " + number);
       pageNumber[where] = number;
-      if(number >= 7 && number < 87) {
+      if(number >= startPageNumber && number < endPageNumber) {
         flagPageTurned = true;
       }else{
         if(flagPageTurned) {
