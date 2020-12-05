@@ -97,7 +97,10 @@ class Model():
         for m in measurements:
             self.add(m)
 
-def cost(gazeAveragingFactor, gazeSwitchThreshold, gazeBorder):
+def cost(x):
+    gazeAveragingFactor = x[0]
+    gazeSwitchThreshold = x[1]
+    gazeBorder = x[2]
     # run simulation
     measurementFiles = ['exampleData.csv']
     measurements = {}
@@ -123,4 +126,4 @@ def cost(gazeAveragingFactor, gazeSwitchThreshold, gazeBorder):
     return(cost)
     
 if __name__ == "__main__":
-    print("Cost: " + str(cost(0.2, 0.8, 0.05)))
+    print("Cost: " + str(cost([0.2, 0.8, 0.05])))
