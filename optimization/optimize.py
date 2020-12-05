@@ -1,6 +1,7 @@
 #!/usr/bin/env python3
 import math
 import csv
+import randomsearch as rs
 
 class Measurement():
     def __init__(self, args):
@@ -127,3 +128,5 @@ def cost(x):
     
 if __name__ == "__main__":
     print("Cost: " + str(cost([0.2, 0.8, 0.05])))
+    a,b = rs.optimize(cost,3,[0,0,0],[1,1,1],1000)
+    print(a,",",b)
