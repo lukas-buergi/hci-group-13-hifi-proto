@@ -36,11 +36,13 @@ class Model():
     
     GAZE_REFERENCE_FREQUENCY = 6
     
-    def __init__(self, gazeAveragingFactor, gazeSwitchThreshold, gazeBorder):
+    def __init__(self, gazeAveragingFactor, gazeSwitchThreshold, gazeBorder, resetThreshold):
         self.gazeAveragingFactor = gazeAveragingFactor
         self.gazeSwitchThreshold = gazeSwitchThreshold
         self.gazeBorder = gazeBorder
+        self.resetThreshold = resetThreshold
         
+        self.wrongTime = 0
         self.recentAverageGaze = 1
         self.currentNormalizedGaze = self.recentAverageGaze
         
@@ -81,17 +83,30 @@ class Model():
                 return(SimulatedMeasurement([m.time, m.pageUpper+2, m.pageLower]))
         else:
             return(SimulatedMeasurement([m.time, m.pageUpper, m.pageLower]))
-        
 
     def add(self, measurement):
+        # if it's the first we need the time of a "previous" sample
         if(self.measurements == []):
             self.lastGazeTime = measurement.time
+        
+        # keep track of measurements in this object
         self.measurements.append(measurement)
+        
+        # calculate next simulated measurement
         position = self.boundingBox()
         if(position != self.NONE):
+            # position in bounding box
             sm=self.average(position)
         else:
             sm=measurement
+        
+        # check if we have been wrong too long
+        if(self.wrongTime > self.resetThreshold):
+            self.wrongTime = 0
+            # reset simulation
+            sm=measurement
+            self.lastGazeTime = sm.time
+        
         self.simulation.append(sm)
             
     def addAll(self, measurements):
@@ -102,6 +117,14 @@ def cost(x):
     gazeAveragingFactor = x[0]
     gazeSwitchThreshold = x[1]
     gazeBorder = x[2]
+    resetThreshold = x[3]
+    
+    # constant weights of the different cost summands
+    weight = {
+      'wrongness' : 1.0,
+      'resetThreshold' : 10.0,
+    }
+    
     # run simulation
     measurementFiles = ['exampleData.csv']
     measurements = {}
@@ -113,20 +136,38 @@ def cost(x):
             measurements[measurement] = []
             for row in reader:
                 measurements[measurement].append(Measurement(row))
-        simulations[measurement] = Model(gazeAveragingFactor, gazeSwitchThreshold, gazeBorder)
+            # too short measurements make no sense and are probably unintentional
+            assert(len(measurements[measurement]) > 10)
+        simulations[measurement] = Model(gazeAveragingFactor, gazeSwitchThreshold, gazeBorder, resetThreshold)
         simulations[measurement].addAll(measurements[measurement])
     
     # determine the cost
     cost = 0
     for key, simulation in simulations.items():
-        while len(simulation.simulation) > 0:
+        simulationLength = simulation.measurements[-1].time - simulation.measurements[0].time
+        # while we have a current and a previous time step, starting at the last time step...
+        while len(simulation.simulation) > 1:
             sim = simulation.simulation.pop()
             mea = simulation.measurements.pop()
+            timeDiff = mea.time - simulation.measurements[-1].time
             if(sim.pageUpper != mea.pageUpper or sim.pageLower != mea.pageLower):
-                cost += 1
+                cost += timeDiff
+        # get cost as fraction of time this simulation was wrong
+        cost /= simulationLength
+    # divide by number of simulations to get average of wrongness fractions
+    cost /= len(simulations)
+    
+    cost *= weight['wrongness']
+                
+    # a low reset threshold is bad because it means the simulated user turned pages manually all the time
+    cost += weight['resetThreshold'] / resetThreshold
     return(cost)
     
 if __name__ == "__main__":
-    print("Cost: " + str(cost([0.2, 0.8, 0.05])))
-    a,b = rs.optimize(cost,3,[0,0,0],[1,1,1],1000)
-    print(a,",",b)
+    print("Example cost: " + str(cost([0.2, 0.8, 0.05, 10])))
+    a,b = rs.optimize(cost,4,[0,0,0,1],[1,1,1,30],1000)
+    print("Best achieved cost: ", a)
+    print("avg factor: ", b[0])
+    print("switch: ", b[1])
+    print("border: ", b[2])
+    print("reset: ", b[3])
