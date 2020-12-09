@@ -9,8 +9,15 @@ function whereNot(where){
     console.log("bad useage: whereNot()");
   }
 }
+/* Calibration screen *************************************************/
+function on() {
+  document.getElementById("calibration-overlay").style.display = "block";
+}
 
-/* Toggle visibility of the menu and status bars */
+function off() {
+  document.getElementById("calibration-overlay").style.display = "none";
+}
+/* Toggle visibility of the menu and status bars **********************/
 function toggleMenu() {
 	var menu = document.getElementById("menu");
 	

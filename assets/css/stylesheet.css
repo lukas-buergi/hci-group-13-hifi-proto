@@ -48,35 +48,15 @@ body {
 
   /* display on top but below overlay buttons */
   z-index: 1;
-
-  /* debug, make it visible */
-  /*
-  background: repeating-linear-gradient(
-    45deg,
-    #606dbc,
-    #606dbc 10px,
-    #465298 10px,
-    #465298 20px
-  );
-  */
 }
 div.sheet-music {
   /* 200:75 aspect ratio */
   width: 100%;
   height: 0;
   padding-bottom: calc(100% * 75 / 200);
+  
   /* highlight / border */
   position: relative;
-
-  /* placeholder */
-  text-align: center;
-  font-size: xxx-large;
-  /* removed checkerboard under pdf sheet because otherwise the fade in fade out is definitely more distracting */
-  /* background-color: #ff9; */
-  /* background-image: linear-gradient(45deg, #808080 25%, transparent 25%), linear-gradient(-45deg, #808080 25%, transparent 25%), linear-gradient(45deg, transparent 75%, #808080 75%), linear-gradient(-45deg, transparent 75%, #808080 75%); */
-  background-color: #ffffff;
-  background-size: 20px 20px;
-  background-position: 0 0, 0 10px, 10px -10px, -10px 0px;
 }
 #lower-pdf, #upper-pdf{
   width: 100%;
@@ -118,7 +98,7 @@ div.video {
   /* debug */
   text-align: center;
   font-size: xxx-large;
-  background: rgba(0,255,0,0.5);
+  background: #000;
 }
 .video > img {
   width: 100%;
@@ -180,7 +160,7 @@ div.overlay {
   right: 0;
   border-style:  solid none none solid;
 }
-#overlay_ramis {
+#calibration-overlay {
   position: fixed;
   display: none;
   width: 100%;
@@ -195,7 +175,7 @@ div.overlay {
   text-align: center;
 }
 
-#text_ramis{
+#calibration-text{
   position: absolute;
   top: 30%;
   left: 50%;
@@ -205,8 +185,7 @@ div.overlay {
   transform: translate(-50%,-50%);
   -ms-transform: translate(-50%,-50%);
 }
-
-#point1 {
+#calibration-point-1 {
   position: absolute;
   top: 0%;
   left: 0%;
@@ -217,7 +196,7 @@ div.overlay {
   border-radius: 25px;
   background: red;
 }
-#point2 {
+#calibration-point-2 {
   position: absolute;
   top: 50%;
   left: 0;
@@ -228,7 +207,7 @@ div.overlay {
   border-radius: 25px;
   background: red;
 }
-#point3 {
+#calibration-point-3 {
   position: absolute;
   top: 90%;
   left: 0;
@@ -239,7 +218,7 @@ div.overlay {
   border-radius: 25px;
   background: red;
 }
-#point4 {
+#calibration-point-4 {
   position: absolute;
   top: 0;
   left: 50%;
@@ -250,7 +229,7 @@ div.overlay {
   border-radius: 25px;
   background: red;
 }
-#point5 {
+#calibration-point-5 {
   position: absolute;
   top: 0;
   left: 90%;
@@ -261,7 +240,7 @@ div.overlay {
   border-radius: 25px;
   background: red;
 }
-#point6 {
+#calibration-point-6 {
   position: absolute;
   top: 50%;
   left: 50%;
@@ -272,7 +251,7 @@ div.overlay {
   border-radius: 25px;
   background: red;
 }
-#point7 {
+#calibration-point-7 {
   position: absolute;
   top: 50%;
   left: 90%;
@@ -283,7 +262,7 @@ div.overlay {
   border-radius: 25px;
   background: red;
 }
-#point8 {
+#calibration-point-8 {
   position: absolute;
   top: 90%;
   left: 50%;
@@ -294,7 +273,7 @@ div.overlay {
   border-radius: 25px;
   background: red;
 }
-#point9 {
+#calibration-point-9 {
   position: absolute;
   top: 90%;
   left: 90%;
