@@ -1,0 +1,6 @@
+For flurinGatheredDataPage1-11endedAt21_07_24.csv there is an optimal solution which is:
+  Best achieved cost:  0.3336028090650899
+  avg factor:  0.2931978195602054
+  switch:  0.436936186829908
+  border:  0.5129171007824062
+  reset:  29.975766774940077

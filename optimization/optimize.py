@@ -135,7 +135,7 @@ def cost(x):
     }
     
     # run simulation
-    measurementFiles = ['exampleData.csv']
+    measurementFiles = ['flurinGatheredDataPage1-11endedAt21_07_24.csv'] #['exampleData.csv']
     measurements = {}
     simulations = {}
     for measurement in measurementFiles:
