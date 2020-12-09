@@ -40,7 +40,7 @@ class Model():
         self.gazeAveragingFactor = gazeAveragingFactor
         self.gazeSwitchThreshold = gazeSwitchThreshold
         self.gazeBorder = gazeBorder
-        self.resetThreshold = resetThreshold
+        self.resetThreshold = 1000 * resetThreshold # parameter is in s, but we consistently use ms here
         
         self.wrongTime = 0
         self.recentAverageGaze = 1
@@ -88,6 +88,7 @@ class Model():
         # if it's the first we need the time of a "previous" sample
         if(self.measurements == []):
             self.lastGazeTime = measurement.time
+            self.lastRight = measurement.time
         
         # keep track of measurements in this object
         self.measurements.append(measurement)
@@ -100,11 +101,19 @@ class Model():
         else:
             sm=measurement
         
+        # are we currently wrong?
+        if(sm.pageUpper != measurement.pageUpper or sm.pageLower != measurement.pageLower):
+            self.wrongTime = sm.time - self.lastRight
+        else:
+            self.wrongTime = 0
+            self.lastRight = sm.time
+        
         # check if we have been wrong too long
         if(self.wrongTime > self.resetThreshold):
             self.wrongTime = 0
             # reset simulation
             sm=measurement
+            self.lastRight = sm.time
             self.lastGazeTime = sm.time
         
         self.simulation.append(sm)
