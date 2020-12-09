@@ -5,14 +5,14 @@
 	</head>
 	<body>
 		<div id="app-container">
-			<ul class="nav-bar" id="menu">
-				<li class="nav-bar-element"><a onclick="on()" href="#">Calibrate</a></li>
-				<li class="nav-bar-element"><a onclick="toggleFullscreen()" href="#">Fullscreen</a></li>
-				<li class="nav-bar-element">Load Sheet Music</li>
-				<li class="nav-bar-element"><a onclick="startStopAction()" id="start-stop" href="#">Start</a></li>
-			</ul>
 			<div id="touch-capture"></div>
 			<div id="sheet-music-upper" class="sheet-music">
+				<ul class="nav-bar" id="menu">
+					<li class="nav-bar-element"><a onclick="calibrationScreenOn()" href="#">Calibrate</a></li>
+					<li class="nav-bar-element"><a onclick="toggleFullscreen()" href="#">Fullscreen</a></li>
+					<li class="nav-bar-element">Load Sheet Music</li>
+					<li class="nav-bar-element"><a id="start-stop" onclick="startStopAction()" href="#">Stop</a></li>
+				</ul>
 				<div id="sheet-music-upper-content">
 					<canvas id="upper-pdf"></canvas>
 				</div>
@@ -20,37 +20,42 @@
 			</div>
 			<div id="video-display">
 				<div id="video-1" class="video"><img src="./assets/images/video-placeholder.png"></img></div>
-				<div id="video-2" class="video"><img src="./assets/images/video-placeholder.png"></img></div>
+				<div id="video-2" class="video">
+					<img src="./assets/images/video-placeholder.png"></img>
+					<button id="toggleDataCollection" onclick="toggleDataCollection()">Collect data</button>
+				</div>
 				<div id="video-3" class="video"><img src="./assets/images/video-placeholder.png"></img></div>
 				<div id="video-4" class="video"><img src="./assets/images/video-placeholder.png"></img></div>
 				<div id="overlay-1" class="overlay" onclick="toggleMenu()">Hide Menu</div>
 				<div id="overlay-2" class="overlay">
 					<img src="./assets/images/eyeInactive.svg.png"></img>
 				</div>
-				<div id="overlay-3" class="overlay" onclick="toggleStatus()">Hide Status</div>
+				<div id="overlay-3" class="overlay" onclick="toggleStatus()">
+					Hide Status
+				</div>
 				<div id="overlay-4" class="overlay">
 					<img src="./assets/images/eyeInactive.svg.png"></img>
 				</div>
 			</div>
 			<div id="sheet-music-lower" class="sheet-music">
+				<ul class="nav-bar" id="status">
+					<li class="nav-bar-element">Recording in progress</li>
+					<li class="nav-bar-element">Time: 2min 10s</li>
+					<li class="nav-bar-element">Connection: 5/5</li>
+					<input class="nav-bar-element" type="text" id="start-page-number" value="7">
+					<input class="nav-bar-element" type="text" id="end-page-number" value="87">
+					<button class= "nav-bar-element" onclick="setBoundsForGatheringData();">Save interval</button>
+				</ul>
 				<div id="sheet-music-lower-content">
 					<canvas id="lower-pdf"></canvas>
 				</div>
 				<div id="sheet-music-border-lower" class="sheet-music-border"></div>
 			</div>
-			<ul class="nav-bar" id="status">
-				<li class="nav-bar-element">Recording in progress</li>
-				<li class="nav-bar-element">Time: 2min 10s</li>
-				<li class="nav-bar-element">Connection: 5/5</li>
-				<input class="nav-bar-element" type="text" id="start-page-number" value="7">
-				<input class="nav-bar-element" type="text" id="end-page-number" value="87">
-				<button class= "nav-bar-element" onclick="setBoundsForGatheringData();">Save interval</button>
-			</ul>
 		</div>
 		<div id="calibration-overlay">
 			<div id="calibration-text">
 				To calibrate the eye gaze detection system, stare at and click on the red circles until the moving red dot acceptably follows your eye gaze. Then click on the button to continue.<br>
-				<button onclick="off();">Finished calibrating.</button>
+				<button onclick="calibrationScreenOff();">Finished calibrating.</button>
 			</div>
 			<div id="calibration-point-1"></div>
 			<div id="calibration-point-2"></div>

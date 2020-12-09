@@ -10,12 +10,12 @@ function whereNot(where){
   }
 }
 /* Calibration screen *************************************************/
-function on() {
-  document.getElementById("calibration-overlay").style.display = "block";
+function calibrationScreenOn() {
+  document.getElementById("calibration-overlay").style.visibility = "visible";
 }
 
-function off() {
-  document.getElementById("calibration-overlay").style.display = "none";
+function calibrationScreenOff() {
+  document.getElementById("calibration-overlay").style.visibility = "hidden";
 }
 /* Toggle visibility of the menu and status bars **********************/
 function toggleMenu() {
@@ -38,11 +38,11 @@ function toggleStatus() {
 		document.getElementById("overlay-3").innerHTML = "Hide Status";
 	} else {
 		status.style.visibility = "hidden";
-		document.getElementById("overlay-3").innerHTML = "Show Status";
+		document.getElementById("overlay-3").innerHTML = "Status: (o)";
 	}
 }
 
-/* Toggle fullscreen (button in menu) */
+/* Toggle fullscreen (button in menu) *********************************/
 function toggleFullscreen() {
 	if(document.fullscreenElement){
 		document.exitFullscreen();
@@ -50,18 +50,65 @@ function toggleFullscreen() {
 		document.documentElement.requestFullscreen();
 	}
 }
-
-/* Start/Stop action */
+/* toggle auto turn ***************************************************/
 function startStopAction() {
 	var btn = document.getElementById("start-stop")
 	
-	if(btn.innerHTML == "Start"){
-		btn.innerHTML = "Stop";
-		autoTurnToggle();
-	} else {
+	if(btn.innerHTML == "Stop"){
 		btn.innerHTML = "Start";
 		autoTurnToggle();
+	} else {
+		btn.innerHTML = "Stop";
+		autoTurnToggle();
 	}
+}
+/* Data collection *********************************************/
+var dataCollection = false;
+var dataCollectionStartPage;
+var gatheredData = [("Elapsed Time,Absolute x coordinate,Absolute y coordinate,eyeGazePdfUpperRect.x,eyeGazePdfUpperRect.y,"
+  + "eyeGazePdfUpperRect.height,eyeGazePdfUpperRect.width,eyeGazePdfLowerRect.x,eyeGazePdfLowerRect.y,"
+  + "eyeGazePdfLowerRect.height,eyeGazePdfLowerRect.width,upper page number,lower page number")];
+
+function toggleDataCollection(){
+  let btn = document.getElementById("toggleDataCollection");
+  let where;
+  if(getCurrentNormalizedGaze() == 1){
+    where = "upper";
+  } else {
+    where = "lower";
+  }
+  if(dataCollection){
+    console.log("Stopped collecting, offering for download");
+    btn.innerHTML = "Collect data";
+    dataCollection = false;
+    let dataCollectionStopPage = pageNumber[where];
+    let time = new Date().toLocaleTimeString('de-CH');
+    save("gatheredDataPage" + dataCollectionStartPage + "-" + dataCollectionStopPage + "endedAt" + time + ".csv", gatheredData);
+  } else {
+    console.log("Stop collection");
+    btn.innerHTML = "Stop collecting data";
+    dataCollection = true
+    dataCollectionStartPage = pageNumber[where];
+  }
+}
+
+function save(filename, data) {
+  let csv = "";
+  data.forEach(el => {
+    csv += el + "\n";
+  });
+  var blob = new Blob([csv], {type: 'text/csv'});
+  if(window.navigator.msSaveOrOpenBlob) {
+      window.navigator.msSaveBlob(blob, filename);
+  }
+  else{
+      var elem = window.document.createElement('a');
+      elem.href = window.URL.createObjectURL(blob);
+      elem.download = filename;        
+      document.body.appendChild(elem);
+      elem.click();        
+      document.body.removeChild(elem);
+  }
 }
 
 /* TOUCH INPUT ********************************************************/
@@ -178,30 +225,6 @@ const EYE_GAZE_BORDER = 0.05; // config parameter
 /* const SCREEN_WIDTH = screen.width; */
 
 var currentGaze;
-var flagPageTurned = false;
-var gatheredData = [("Elapsed Time,Absolute x coordinate,Absolute y coordinate,eyeGazePdfUpperRect.x,eyeGazePdfUpperRect.y,"
-  + "eyeGazePdfUpperRect.height,eyeGazePdfUpperRect.width,eyeGazePdfLowerRect.x,eyeGazePdfLowerRect.y,"
-  + "eyeGazePdfLowerRect.height,eyeGazePdfLowerRect.width,upper page number,lower page number")];
-/* var gatheredData = ["Elapsed Time,Relative x coordinate,Relative y coordinate,upper page number,lower page number"]; */
-
-function save(filename, data) {
-  let csv = "";
-  data.forEach(el => {
-    csv += el + "\n";
-  });
-  var blob = new Blob([csv], {type: 'text/csv'});
-  if(window.navigator.msSaveOrOpenBlob) {
-      window.navigator.msSaveBlob(blob, filename);
-  }
-  else{
-      var elem = window.document.createElement('a');
-      elem.href = window.URL.createObjectURL(blob);
-      elem.download = filename;        
-      document.body.appendChild(elem);
-      elem.click();        
-      document.body.removeChild(elem);
-  }
-}
 
 function setGazeIndicator(x, y, elapsedTime) {
   // need to do those calculations every time to react to resizing
@@ -228,14 +251,11 @@ function setGazeIndicator(x, y, elapsedTime) {
     eyeGazeSetNone();
   }
 
-  if(flagPageTurned){
-    /* let newEntry = (elapsedTime) + "," + (x/SCREEN_WIDTH) + "," + (y/SCREEN_HEIGHT) + "," 
-      + pageNumber["upper"] + "," + pageNumber["lower"]; */ /* relative x, y coordinates */
+  if(dataCollection){
     let newEntry = elapsedTime + "," + x + "," + y + "," + eyeGazePdfUpperRect.x + "," 
       + eyeGazePdfUpperRect.y + "," + eyeGazePdfUpperRect.height + "," + eyeGazePdfUpperRect.width + "," 
       + eyeGazePdfLowerRect.x + "," + eyeGazePdfLowerRect.y + "," + eyeGazePdfLowerRect.height + "," 
       + eyeGazePdfLowerRect.width + "," + pageNumber["upper"] + "," + pageNumber["lower"];
-    console.log(newEntry);
     gatheredData.push(newEntry);
   }
 }
@@ -288,27 +308,11 @@ loadPDF.promise.then(pdf => {
 });
 
 /* adjust pages displayed *********************************************/
-var startPageNumber = 7;
-var endPageNumber = 87;
-
-function setBoundsForGatheringData(){
-  startPageNumber = document.getElementById("start-page-number").value;
-  endPageNumber = document.getElementById("end-page-number").value;
-}
-
 function displayPage(where, number){
   $("#" + where + "-pdf").fadeOut(1000, function() {
     pdfDoc.getPage(number).then(page => {
       console.log("set " + where + " page to " + number);
       pageNumber[where] = number;
-      if(number >= startPageNumber && number < endPageNumber) {
-        flagPageTurned = true;
-      }else{
-        if(flagPageTurned) {
-          save("gatheredData.csv", gatheredData);
-        }
-        flagPageTurned = false;
-      }
       let canvas = document.getElementById(where + "-pdf");
       canvas.height = canvas.clientHeight;
       canvas.width = canvas.clientWidth;
@@ -472,7 +476,7 @@ function enableEyeGaze(){
   webgazer.params.showVideoPreview = true;
   webgazer.setGazeListener(eyeGazeHandler).begin();
   /* might only work a bit later, so wait random amount */
-  window.setTimeout(movePreview, 5000);
+  window.setTimeout(movePreview, 10000);
 }
 
 function movePreview(){
