@@ -11,10 +11,12 @@ function whereNot(where){
 }
 /* Calibration screen *************************************************/
 function calibrationScreenOn() {
+  document.getElementById("start-stop").innerHTML = "Stop";
   document.getElementById("calibration-overlay").style.visibility = "visible";
 }
 
 function calibrationScreenOff() {
+  isCalibrated = true;
   document.getElementById("calibration-overlay").style.visibility = "hidden";
 }
 /* Toggle visibility of the menu and status bars **********************/
@@ -50,16 +52,52 @@ function toggleFullscreen() {
 		document.documentElement.requestFullscreen();
 	}
 }
+
+/* Load a sheet music PDF from the local computer *********************/
+function loadSheetMusicDialog() {
+	document.getElementById("loadSheetMusicInput").click();
+}
+
+function loadSheetMusicPDF() {
+	var file = document.getElementById("loadSheetMusicInput").files[0];
+	var fileReader = new FileReader();
+	
+	fileReader.onload = function () {
+		var typedarray = new Uint8Array(this.result);
+		var loadPDF = pdfjsLib.getDocument(typedarray);		
+		
+		loadPDF.promise.then(pdf => {
+			pdfDoc = pdf;
+			//document.getElementById("start-stop").innerHTML = "Stop";
+			displayPage("upper", 1);
+			displayPage("lower", 2);
+		});
+	}
+		
+	//var pageNumber = {"upper" : 1, "lower" : 2};
+	//console.log(fileInput.value);
+	//loadPDF = pdfjsLib.getDocument(fileInput.value);
+	//var pdfDoc = null;
+	//
+	
+	
+	fileReader.readAsArrayBuffer(file);
+	hasFile = true;
+}
+
+
 /* toggle auto turn ***************************************************/
 function startStopAction() {
 	var btn = document.getElementById("start-stop")
 	
-	if(btn.innerHTML == "Stop"){
-		btn.innerHTML = "Start";
-		autoTurnToggle();
-	} else {
-		btn.innerHTML = "Stop";
-		autoTurnToggle();
+	if(hasFile && isCalibrated) {
+		if(btn.innerHTML == "Stop"){
+			btn.innerHTML = "Start";
+			autoTurnToggle();
+		} else {
+			btn.innerHTML = "Stop";
+			autoTurnToggle();
+		}
 	}
 }
 /* Data collection *********************************************/
@@ -175,6 +213,8 @@ const AUTOTURNON = 0;
 const AUTOTURNOFF = 1;
 
 var autoTurn = AUTOTURNON;
+var hasFile = false;
+var isCalibrated = false;
 
 function autoTurnToggle() {
   if(autoTurn == AUTOTURNON){
@@ -298,8 +338,10 @@ function getCurrentNormalizedGaze(){
 var pageNumber = {"upper" : 1, "lower" : 2};
 var loadPDF = pdfjsLib.getDocument("./assets/images/music.pdf");
 var pdfDoc = null;
-
+//enableEyeGaze();
+//
 loadPDF.promise.then(pdf => {
+	hasFile = true;
     pdfDoc = pdf;
     displayPage("upper", 1);
     displayPage("lower", 2);
@@ -309,22 +351,24 @@ loadPDF.promise.then(pdf => {
 
 /* adjust pages displayed *********************************************/
 function displayPage(where, number){
-  $("#" + where + "-pdf").fadeOut(1000, function() {
-    pdfDoc.getPage(number).then(page => {
-      console.log("set " + where + " page to " + number);
-      pageNumber[where] = number;
-      let canvas = document.getElementById(where + "-pdf");
-      canvas.height = canvas.clientHeight;
-      canvas.width = canvas.clientWidth;
-      let viewport = page.getViewport({scale: canvas.width / page.getViewport({scale: 1.0}).width});
-      let renderContext = {
-        canvasContext : canvas.getContext("2d"),
-        viewport:  viewport
-      }
-      page.render(renderContext)
-    })
-  })
-  $("#" + where + "-pdf").fadeIn(1000);
+	if(hasFile) {
+		  $("#" + where + "-pdf").fadeOut(1000, function() {
+			pdfDoc.getPage(number).then(page => {
+			  console.log("set " + where + " page to " + number);
+			  pageNumber[where] = number;
+			  let canvas = document.getElementById(where + "-pdf");
+			  canvas.height = canvas.clientHeight;
+			  canvas.width = canvas.clientWidth;
+			  let viewport = page.getViewport({scale: canvas.width / page.getViewport({scale: 1.0}).width});
+			  let renderContext = {
+				canvasContext : canvas.getContext("2d"),
+				viewport:  viewport
+			  }
+			  page.render(renderContext)
+			})
+		  })
+		  $("#" + where + "-pdf").fadeIn(1000);
+	}
 }
 
 /* sheet music highlight border upper/lower/transition ****************/
@@ -476,7 +520,7 @@ function enableEyeGaze(){
   webgazer.params.showVideoPreview = true;
   webgazer.setGazeListener(eyeGazeHandler).begin();
   /* might only work a bit later, so wait random amount */
-  window.setTimeout(movePreview, 10000);
+  window.setTimeout(movePreview, 5000);
 }
 
 function movePreview(){

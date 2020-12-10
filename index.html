@@ -10,8 +10,11 @@
 				<ul class="nav-bar" id="menu">
 					<li class="nav-bar-element"><a onclick="calibrationScreenOn()" href="#">Calibrate</a></li>
 					<li class="nav-bar-element"><a onclick="toggleFullscreen()" href="#">Fullscreen</a></li>
-					<li class="nav-bar-element">Load Sheet Music</li>
-					<li class="nav-bar-element"><a id="start-stop" onclick="startStopAction()" href="#">Stop</a></li>
+					<li class="nav-bar-element">
+						<input type="file" id="loadSheetMusicInput" accept="application/pdf" onchange="loadSheetMusicPDF()">
+						<a onclick="loadSheetMusicDialog()" href="#">Load Sheet Music</a>
+					</li>
+					<li class="nav-bar-element"><a id="start-stop" onclick="startStopAction()" href="#">Start</a></li>
 				</ul>
 				<div id="sheet-music-upper-content">
 					<canvas id="upper-pdf"></canvas>

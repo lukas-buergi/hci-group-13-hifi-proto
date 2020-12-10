@@ -139,6 +139,7 @@ div.overlay {
 	margin: 0;
 	text-decoration: none;
 	font-family: sans-serif;
+	padding: 6px;
 }
 #overlay-2 {
   top: 0;
@@ -155,6 +156,7 @@ div.overlay {
 	border-style: solid solid;
 	text-decoration: none;
 	font-family: sans-serif;
+	padding: 6px;
 }
 #overlay-4 {
   bottom: 0;
@@ -343,3 +345,8 @@ a:link, a:visited {
 li.nav-bar-element:hover {
 	background-color: #E5E5E5;
 }
+
+#loadSheetMusicInput {
+	display: none;
+}
+
