@@ -4,7 +4,10 @@ import csv
 import randomsearch as rs
 import random
 import numpy as np
+from mpl_toolkits.mplot3d import Axes3D
 import matplotlib.pyplot as plt
+from matplotlib import cm
+from matplotlib.ticker import LinearLocator, FormatStrFormatter
 
 # constant weights of the different cost summands
 weight = {
@@ -225,27 +228,62 @@ def optimize(function, dimensions, lower_boundary, upper_boundary, max_iter, max
 
 def randomSearch(files): 
     opt = Optimization(files)
-    a,b = rs.optimize(opt.cost, 4, [0, 0, 0 , 1000000], [1, 1, 0.5, 1000000], 100)
+    a,b = rs.optimize(opt.cost, 4, [0, 0, 0 , 1000000], [1, 1, 0.5, 1000000], 1000)
     print("Best achieved cost: ", a)
     print("avg factor: ", b[0])
     print("switch: ", b[1])
     print("border: ", b[2])
     print("reset: ", b[3], "(reset cost:", weight['resetThreshold'] / b[3], ")")
     
+def plotCost(files):
+    opt = Optimization(files)
+    def f(xs, ys):
+        return([opt.cost([x, y, 0.30796802554860314, 1000000]) for x, y in zip(xs, ys)])
+        
+    fig = plt.figure()
+    ax = fig.gca(projection='3d')
+    ax.set_xlabel('avg factor')
+    ax.set_ylabel('switch')
+    ax.set_zlabel('Cost')
+    
+    # Make data.
+    X = np.arange(0.011, 0.013, 0.0001)
+    Y = np.arange(0.595, 0.605, 0.0005)
+    X, Y = np.meshgrid(X, Y)
+    
+    zs = np.array(f(np.ravel(X), np.ravel(Y)))
+    Z = zs.reshape(X.shape)
+
+    # Plot the surface.
+    surf = ax.plot_surface(X, Y, Z, cmap=cm.coolwarm,
+                           linewidth=0, antialiased=False)
+
+    # Customize the z axis.
+    ax.set_zlim(0, 1)
+
+    # Add a color bar which maps values to colors.
+    fig.colorbar(surf, shrink=0.5, aspect=5)
+
+    plt.show()
+    
 if __name__ == "__main__":
     measurementFiles = ['flurinGatheredDataPage1-11endedAt21_07_24.csv', 'lukasJustReadingGatheredDataPage1-4endedAt18_08_42.csv', 'lukasJustReadingGatheredDataPage7-12endedAt18_14_56.csv', 'exampleData.csv', 'perfectArtificalTestData.csv']
 
-    if(True):
+    if(False):
        randomSearch(measurementFiles[0:3])
 
     if(False):
         opt = Optimization(measurementFiles[0:3])
-        params = [0.2, 0.8, 0.05, 10]
+        params = [0.045, 0.9, 0.3, 10] # pretty good
+        #params = [0.2931978195602054, 0.436936186829908, 0.5129171007824062, 1000000]
+        #params = [0.01318708432625526, 0.8988984044776684, 0.008015402940925398, 1000000]
+        #params = [0.01318708432625526, 0.8988984044776684, 0.008015402940925398, 1000000]
+        #params = [0.9, 0.1, 0, 1000000]
         print("Example: cost(" + str(params) + ") = " + str(opt.cost(params)), "(reset cost:", weight['resetThreshold'] / params[3], ")")
-        #print("Example: cost(" + str([0.2931978195602054, 0.436936186829908, 0.5129171007824062, 1000000]) + ") = " + str(cost([0.2931978195602054, 0.436936186829908, 0.5129171007824062, 1000000])))
-        #print("Example: cost(" + str([0.01318708432625526, 0.8988984044776684, 0.008015402940925398, 1000000]) + ") = " + str(cost([0.01318708432625526, 0.8988984044776684, 0.008015402940925398, 1000000])))
-        #print("Example: cost(" + str([0.9, 0.1, 0, 1000000]) + ") = " + str(cost([1, 0, 0, 1000000])))
 
     if(False):
         opt = Optimization(measurementFiles[0:3])
         a,b,c = optimize(opt.cost, 4,[0,0,0,1],[1,1,1,30],1000)
+
+    if(True):
+        plotCost(measurementFiles[0:3])

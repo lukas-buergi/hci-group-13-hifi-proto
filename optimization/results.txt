@@ -9,9 +9,10 @@
   'flurinGatheredDataPage1-11endedAt21_07_24.csv',
   'lukasJustReadingGatheredDataPage1-4endedAt18_08_42.csv',
   'lukasJustReadingGatheredDataPage7-12endedAt18_14_56.csv'
-  together, the best so far (800 iterations) is:
-    Best achieved cost:  0.5123663568708917
-    avg factor:  0.1300241066728115
-    switch:  0.9856190763618122
-    border:  0.22289943446958793
+  together, the best so far (5000 iterations) is:
+    Best achieved cost:  0.44599900323700786
+    avg factor:  0.01175854609118443
+    switch:  0.6046384698876924
+    border:  0.30796802554860314
     reset:  1000000.0 (reset cost: 1e-05 )
+    
