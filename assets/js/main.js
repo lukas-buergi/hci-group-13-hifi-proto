@@ -103,9 +103,10 @@ function startStopAction() {
 /* Data collection *********************************************/
 var dataCollection = false;
 var dataCollectionStartPage;
-var gatheredData = [("Elapsed Time,Absolute x coordinate,Absolute y coordinate,eyeGazePdfUpperRect.x,eyeGazePdfUpperRect.y,"
+const csvHeader = [("Elapsed Time,Absolute x coordinate,Absolute y coordinate,eyeGazePdfUpperRect.x,eyeGazePdfUpperRect.y,"
   + "eyeGazePdfUpperRect.height,eyeGazePdfUpperRect.width,eyeGazePdfLowerRect.x,eyeGazePdfLowerRect.y,"
   + "eyeGazePdfLowerRect.height,eyeGazePdfLowerRect.width,upper page number,lower page number")];
+var gatheredData = csvHeader;
 
 function toggleDataCollection(){
   let btn = document.getElementById("toggleDataCollection");
@@ -116,14 +117,13 @@ function toggleDataCollection(){
     where = "lower";
   }
   if(dataCollection){
-    console.log("Stopped collecting, offering for download");
     btn.innerHTML = "Collect data";
     dataCollection = false;
     let dataCollectionStopPage = pageNumber[where];
     let time = new Date().toLocaleTimeString('de-CH');
     save("gatheredDataPage" + dataCollectionStartPage + "-" + dataCollectionStopPage + "endedAt" + time + ".csv", gatheredData);
+    gatheredData = csvHeader;
   } else {
-    console.log("Stop collection");
     btn.innerHTML = "Stop collecting data";
     dataCollection = true
     dataCollectionStartPage = pageNumber[where];

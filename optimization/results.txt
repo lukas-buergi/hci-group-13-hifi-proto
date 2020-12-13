@@ -1,6 +1,12 @@
-For flurinGatheredDataPage1-11endedAt21_07_24.csv there is an optimal solution which is:
-  Best achieved cost:  0.3336028090650899
-  avg factor:  0.2931978195602054
-  switch:  0.436936186829908
-  border:  0.5129171007824062
-  reset:  29.975766774940077
+  For perfectArtificalTestData.csv the best solution should have cost basically 0.
+  For flurinGatheredDataPage1-11endedAt21_07_24.csv the best solution encountered so far is:
+Best achieved cost:  0.6759374523189957
+avg factor:  0.07618552549301894
+switch:  0.7609671012429418
+border:  0.12389962085725292
+reset:  47.919274469910164 (reset cost: 0.20868429479831285 )
+  For
+    'flurinGatheredDataPage1-11endedAt21_07_24.csv',
+    'lukasJustReadingGatheredDataPage1-4endedAt18_08_42.csv',
+    'lukasJustReadingGatheredDataPage7-12endedAt18_14_56.csv'
+  together, the best so far is:
