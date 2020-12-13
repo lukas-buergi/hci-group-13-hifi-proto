@@ -225,7 +225,7 @@ def optimize(function, dimensions, lower_boundary, upper_boundary, max_iter, max
 
 def randomSearch(files): 
     opt = Optimization(files)
-    a,b = rs.optimize(opt.cost, 4, [0, 0, 0 ,10], [1, 1, 0.5, 60], 100)
+    a,b = rs.optimize(opt.cost, 4, [0, 0, 0 , 1000000], [1, 1, 0.5, 1000000], 100)
     print("Best achieved cost: ", a)
     print("avg factor: ", b[0])
     print("switch: ", b[1])
