@@ -2,6 +2,9 @@
 import math
 import csv
 import randomsearch as rs
+import random
+import numpy as np
+import matplotlib.pyplot as plt
 
 class Measurement():
     def __init__(self, args):
@@ -135,7 +138,7 @@ def cost(x):
     }
     
     # run simulation
-    measurementFiles = ['flurinGatheredDataPage1-11endedAt21_07_24.csv'] #['exampleData.csv']
+    measurementFiles = ['exampleData.csv']#['flurinGatheredDataPage1-11endedAt21_07_24.csv'] 
     measurements = {}
     simulations = {}
     for measurement in measurementFiles:
@@ -171,10 +174,39 @@ def cost(x):
     # a low reset threshold is bad because it means the simulated user turned pages manually all the time
     cost += weight['resetThreshold'] / resetThreshold
     return(cost)
+def optimize(function, dimensions, lower_boundary, upper_boundary, max_iter, maximize=False):
+    best_solution = np.array([float()] * dimensions)
+    plot_data = np.array([])
+    for i in range(dimensions):
+        best_solution[i] = random.uniform(lower_boundary[i], upper_boundary[i])
+
+    for _ in range(max_iter):
+
+        solution1 = function(best_solution)
+        plot_data = np.append(plot_data,solution1)
+
+        new_solution = [lower_boundary[d] + random.random() * (upper_boundary[d] - lower_boundary[d]) for d in
+                        range(dimensions)]
+
+        if np.greater_equal(new_solution, lower_boundary).all() and np.less_equal(new_solution, upper_boundary).all():
+            solution2 = function(new_solution)
+        elif maximize:
+            solution2 = -100000.0
+        else:
+            solution2 = 100000.0
+
+        if solution2 > solution1 and maximize:
+            best_solution = new_solution
+        elif solution2 < solution1 and not maximize:
+            best_solution = new_solution
+
+    best_fitness = function(best_solution)
+
+    return best_fitness, best_solution, plot_data
     
 if __name__ == "__main__":
     print("Example cost: " + str(cost([0.2, 0.8, 0.05, 10])))
-    a,b = rs.optimize(cost,4,[0,0,0,1],[1,1,1,30],1000)
+    a,b,c = optimize(cost,4,[0,0,0,1],[1,1,1,30],1000)
     print("Best achieved cost: ", a)
     print("avg factor: ", b[0])
     print("switch: ", b[1])
