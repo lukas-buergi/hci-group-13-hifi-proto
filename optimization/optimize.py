@@ -138,7 +138,7 @@ def cost(x):
     }
     
     # run simulation
-    measurementFiles = ['exampleData.csv']#['flurinGatheredDataPage1-11endedAt21_07_24.csv'] 
+    measurementFiles = ['flurinGatheredDataPage1-11endedAt21_07_24.csv'] #['exampleData.csv']
     measurements = {}
     simulations = {}
     for measurement in measurementFiles:
@@ -175,6 +175,10 @@ def cost(x):
     cost += weight['resetThreshold'] / resetThreshold
     return(cost)
 def optimize(function, dimensions, lower_boundary, upper_boundary, max_iter, maximize=False):
+    """
+    credits to https://github.com/angelgaspar/randomsearch.git
+
+    """
     best_solution = np.array([float()] * dimensions)
     plot_data = np.array([])
     for i in range(dimensions):
