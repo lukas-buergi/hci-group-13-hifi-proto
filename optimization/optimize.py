@@ -8,6 +8,7 @@ from mpl_toolkits.mplot3d import Axes3D
 import matplotlib.pyplot as plt
 from matplotlib import cm
 from matplotlib.ticker import LinearLocator, FormatStrFormatter
+from scipy.optimize import minimize
 
 # constant weights of the different cost summands
 weight = {
@@ -269,7 +270,7 @@ def plotCost(files):
 if __name__ == "__main__":
     measurementFiles = ['flurinGatheredDataPage1-11endedAt21_07_24.csv', 'lukasJustReadingGatheredDataPage1-4endedAt18_08_42.csv', 'lukasJustReadingGatheredDataPage7-12endedAt18_14_56.csv', 'exampleData.csv', 'perfectArtificalTestData.csv']
 
-    if(True):
+    if(False):
        randomSearch(measurementFiles[0:3])
 
     if(False):
@@ -280,6 +281,15 @@ if __name__ == "__main__":
         #params = [0.01318708432625526, 0.8988984044776684, 0.008015402940925398, 1000000]
         #params = [0.9, 0.1, 0, 1000000]
         print("Example: cost(" + str(params) + ") = " + str(opt.cost(params)), "(reset cost:", weight['resetThreshold'] / params[3], ")")
+    if(True):
+        opt = Optimization(measurementFiles[0:3])
+        params = [0.045, 0.9, 0.3, 10] # pretty good
+        res = minimize(opt.cost, params, method='Nelder-Mead', options={'disp':True, 'maxiter':1000})
+        print("avg factor: ", res.x[0])
+        print("switch: ", res.x[1])
+        print("border: ", res.x[2])
+        print("reset: ", res.x[3], "(reset cost:", weight['resetThreshold'] / res.x[3], ")")
+
 
     if(False):
         opt = Optimization(measurementFiles[0:3])

@@ -1,0 +1,9 @@
+Optimization terminated successfully.
+         Current function value: 0.699982
+         Iterations: 49
+         Function evaluations: 112
+avg factor:  0.04523278067838273
+switch:  0.9135473731846708
+border:  0.3065707234818198
+reset:  10.180435764827267 (reset cost: 0.491138111914096 )
+
