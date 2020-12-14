@@ -12,7 +12,7 @@ from matplotlib.ticker import LinearLocator, FormatStrFormatter
 # constant weights of the different cost summands
 weight = {
   'wrongness' : 1.0,
-  'resetThreshold' : 10.0,
+  'resetThreshold' : 5,
 }
 
 class Measurement():
@@ -228,7 +228,7 @@ def optimize(function, dimensions, lower_boundary, upper_boundary, max_iter, max
 
 def randomSearch(files): 
     opt = Optimization(files)
-    a,b = rs.optimize(opt.cost, 4, [0, 0, 0 , 1000000], [1, 1, 0.5, 1000000], 10000)
+    a,b = rs.optimize(opt.cost, 4, [0, 0, 0 , 5], [1, 1, 0.5, 30], 10000)
     print("Best achieved cost: ", a)
     print("avg factor: ", b[0])
     print("switch: ", b[1])
