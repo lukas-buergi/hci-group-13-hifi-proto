@@ -267,11 +267,28 @@ def plotCost(files):
 
     plt.show()
     
+def nelderMead(func, initialValue):
+    res = minimize(func, initialValue, method='Nelder-Mead', options={'disp' : True, 'maxiter' : 1000, 'return_all' : True})
+    return(func(res.x))
+
+def randomizedNelderMead(files):
+    opt = Optimization(measurementFiles[0:3])
+    f = lambda params : nelderMead(opt.cost, params)
+    a,b = rs.optimize(f, 4, [0, 0, 0 , 5], [1, 1, 0.5, 30], 10)
+    print("Best achieved cost: ", a)
+    print("avg factor: ", b[0])
+    print("switch: ", b[1])
+    print("border: ", b[2])
+    print("reset: ", b[3], "(reset cost:", weight['resetThreshold'] / b[3], ")")
+    
 if __name__ == "__main__":
     measurementFiles = ['flurinGatheredDataPage1-11endedAt21_07_24.csv', 'lukasJustReadingGatheredDataPage1-4endedAt18_08_42.csv', 'lukasJustReadingGatheredDataPage7-12endedAt18_14_56.csv', 'exampleData.csv', 'perfectArtificalTestData.csv']
 
     if(False):
        randomSearch(measurementFiles[0:3])
+
+    if(True):
+        randomizedNelderMead(measurementFiles[0:3])
 
     if(False):
         opt = Optimization(measurementFiles[0:3])
@@ -281,7 +298,8 @@ if __name__ == "__main__":
         #params = [0.01318708432625526, 0.8988984044776684, 0.008015402940925398, 1000000]
         #params = [0.9, 0.1, 0, 1000000]
         print("Example: cost(" + str(params) + ") = " + str(opt.cost(params)), "(reset cost:", weight['resetThreshold'] / params[3], ")")
-    if(True):
+    
+    if(False):
         opt = Optimization(measurementFiles[0:3])
         params = [0.045, 0.9, 0.3, 10] # pretty good
         res = minimize(opt.cost, params, method='Nelder-Mead', options={'disp':True, 'maxiter':1000, 'return_all':True})
