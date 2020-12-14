@@ -9,10 +9,27 @@
   'flurinGatheredDataPage1-11endedAt21_07_24.csv',
   'lukasJustReadingGatheredDataPage1-4endedAt18_08_42.csv',
   'lukasJustReadingGatheredDataPage7-12endedAt18_14_56.csv'
-  together, the best so far (5000 iterations) is:
-    Best achieved cost:  0.44599900323700786
-    avg factor:  0.01175854609118443
-    switch:  0.6046384698876924
-    border:  0.30796802554860314
+  together, the best so far (45000 iterations) is:
+    Best achieved cost:  0.3286520431643349
+    avg factor:  0.04962038786094802
+    switch:  0.7447815220981716
+    border:  0.005308761868076106
+    reset:  1000000.0 (reset cost: 1e-05 )
+  others are:
+    Best achieved cost:  0.36046778347082165
+    avg factor:  0.07654682772760579
+    switch:  0.9481944704125063
+    border:  0.2963394875076432
     reset:  1000000.0 (reset cost: 1e-05 )
     
+    Best achieved cost:  0.3949230615217663
+    avg factor:  0.009611823194181635
+    switch:  0.6186727797744753
+    border:  0.3877859487124352
+    reset:  1000000.0 (reset cost: 1e-05 )
+
+    Best achieved cost:  0.3362826628692937
+    avg factor:  0.031033965884849857
+    switch:  0.6972694047353947
+    border:  0.0969829031355115
+    reset:  1000000.0 (reset cost: 1e-05 )

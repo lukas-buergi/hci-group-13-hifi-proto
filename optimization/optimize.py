@@ -228,7 +228,7 @@ def optimize(function, dimensions, lower_boundary, upper_boundary, max_iter, max
 
 def randomSearch(files): 
     opt = Optimization(files)
-    a,b = rs.optimize(opt.cost, 4, [0, 0, 0 , 1000000], [1, 1, 0.5, 1000000], 1000)
+    a,b = rs.optimize(opt.cost, 4, [0, 0, 0 , 1000000], [1, 1, 0.5, 1000000], 10000)
     print("Best achieved cost: ", a)
     print("avg factor: ", b[0])
     print("switch: ", b[1])
@@ -269,7 +269,7 @@ def plotCost(files):
 if __name__ == "__main__":
     measurementFiles = ['flurinGatheredDataPage1-11endedAt21_07_24.csv', 'lukasJustReadingGatheredDataPage1-4endedAt18_08_42.csv', 'lukasJustReadingGatheredDataPage7-12endedAt18_14_56.csv', 'exampleData.csv', 'perfectArtificalTestData.csv']
 
-    if(False):
+    if(True):
        randomSearch(measurementFiles[0:3])
 
     if(False):
@@ -285,5 +285,5 @@ if __name__ == "__main__":
         opt = Optimization(measurementFiles[0:3])
         a,b,c = optimize(opt.cost, 4,[0,0,0,1],[1,1,1,30],1000)
 
-    if(True):
+    if(False):
         plotCost(measurementFiles[0:3])
