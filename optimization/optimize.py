@@ -284,7 +284,7 @@ if __name__ == "__main__":
     if(True):
         opt = Optimization(measurementFiles[0:3])
         params = [0.045, 0.9, 0.3, 10] # pretty good
-        res = minimize(opt.cost, params, method='Nelder-Mead', options={'disp':True, 'maxiter':1000})
+        res = minimize(opt.cost, params, method='Nelder-Mead', options={'disp':True, 'maxiter':1000, 'return_all':True})
         print("avg factor: ", res.x[0])
         print("switch: ", res.x[1])
         print("border: ", res.x[2])
