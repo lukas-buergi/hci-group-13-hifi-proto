@@ -269,10 +269,10 @@ def plotCost(files):
 if __name__ == "__main__":
     measurementFiles = ['flurinGatheredDataPage1-11endedAt21_07_24.csv', 'lukasJustReadingGatheredDataPage1-4endedAt18_08_42.csv', 'lukasJustReadingGatheredDataPage7-12endedAt18_14_56.csv', 'exampleData.csv', 'perfectArtificalTestData.csv']
 
-    if(False):
+    if(True):
        randomSearch(measurementFiles[0:3])
 
-    if(True):
+    if(False):
         opt = Optimization(measurementFiles[0:3])
         params = [0.045, 0.9, 0.3, 10] # pretty good
         #params = [0.2931978195602054, 0.436936186829908, 0.5129171007824062, 1000000]

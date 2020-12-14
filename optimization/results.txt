@@ -9,7 +9,7 @@
   'flurinGatheredDataPage1-11endedAt21_07_24.csv',
   'lukasJustReadingGatheredDataPage1-4endedAt18_08_42.csv',
   'lukasJustReadingGatheredDataPage7-12endedAt18_14_56.csv'
-  together, the best so far (45000 iterations) is:
+  together, the best so far (145000 iterations) is:
     Best achieved cost:  0.3286520431643349
     avg factor:  0.04962038786094802
     switch:  0.7447815220981716
@@ -33,3 +33,53 @@
     switch:  0.6972694047353947
     border:  0.0969829031355115
     reset:  1000000.0 (reset cost: 1e-05 )
+	Best achieved cost:  0.33750598034833573
+	avg factor:  0.03230820048268623
+	switch:  0.7124381757057034
+	border:  0.10292638248144753
+	reset:  1000000.0 (reset cost: 1e-05 )
+	Best achieved cost:  0.3648267969277641
+	avg factor:  0.020729992828254162
+	switch:  0.7616877124752539
+	border:  0.36648157701549483
+	reset:  1000000.0 (reset cost: 1e-05 )
+	Best achieved cost:  0.3667598799485687
+	avg factor:  0.04695543234228061
+	switch:  0.8785790047083784
+	border:  0.3088350747451514
+	reset:  1000000.0 (reset cost: 1e-05 )
+	Best achieved cost:  0.3597321864029778
+	avg factor:  0.02369267784946627
+	switch:  0.8226306644371817
+	border:  0.3858772353729647
+	reset:  1000000.0 (reset cost: 1e-05 )
+	Best achieved cost:  0.34618180624218425
+	avg factor:  0.051250141407719885
+	switch:  0.9754954716010028
+	border:  0.48605637682691855
+	reset:  1000000.0 (reset cost: 1e-05 )
+	Best achieved cost:  0.3319876565754449
+	avg factor:  0.011337315030587436
+	switch:  0.6099209757427824
+	border:  0.3923762851802386
+	reset:  1000000.0 (reset cost: 1e-05 )
+	Best achieved cost:  0.383877714146728
+	avg factor:  0.0207611212603932
+	switch:  0.863646554018595
+	border:  0.48789387827335784
+	reset:  1000000.0 (reset cost: 1e-05 )
+	Best achieved cost:  0.36671076551167414
+	avg factor:  0.03865979460098845
+	switch:  0.8408890541152674
+	border:  0.3123071935892535
+	reset:  1000000.0 (reset cost: 1e-05 )
+	Best achieved cost:  0.35531866949783014
+	avg factor:  0.01915003765658052
+	switch:  0.7668497410987156
+	border:  0.39632768955596
+	reset:  1000000.0 (reset cost: 1e-05 )
+	Best achieved cost:  0.38082074537176275
+	avg factor:  0.02109405425668165
+	switch:  0.6352481650297916
+	border:  0.08966916385041096
+	reset:  1000000.0 (reset cost: 1e-05 )
