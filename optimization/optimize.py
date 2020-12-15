@@ -267,8 +267,8 @@ def plotCost():
     ax.set_zlabel('Cost')
     
     # Make data.
-    X = np.arange(0.05, 0.3, 0.001)
-    Y = np.arange(0.50, 0.70, 0.001)
+    X = np.arange(0.15, 0.45, 0.001)
+    Y = np.arange(0.60, 0.90, 0.001)
     X, Y = np.meshgrid(X, Y)
     
     zs = np.array(f(np.ravel(X), np.ravel(Y)))
