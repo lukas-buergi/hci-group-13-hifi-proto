@@ -17,6 +17,7 @@ function calibrationScreenOn() {
 
 function calibrationScreenOff() {
   isCalibrated = true;
+  lastGazeTime = new Date().getTime();
   document.getElementById("calibration-overlay").style.visibility = "hidden";
 }
 /* Toggle visibility of the menu and status bars **********************/
@@ -223,6 +224,7 @@ function autoTurnToggle() {
     document.getElementById("overlay-4").hidden=true;
   } else {
     autoTurn = AUTOTURNON;
+    lastGazeTime = new Date().getTime();
     document.getElementById("overlay-2").hidden=false;
     document.getElementById("overlay-4").hidden=false;
   }
@@ -261,12 +263,19 @@ function eyeGazeSetNone() {
 
 /* process eye gaze position into upper/lower *************************/
 const EYE_GAZE_BORDER = 0.05; // config parameter
-/* const SCREEN_HEIGHT = screen.height; */
-/* const SCREEN_WIDTH = screen.width; */
-
 var currentGaze;
 
+var lastGazeTime = new Date().getTime();
+var newGazeTime;
+var tdiff;
+
 function setGazeIndicator(x, y, elapsedTime) {
+  // need to do those calculations not just when gaze is within border
+  newGazeTime = new Date().getTime();
+  tdiff = newGazeTime - lastGazeTime; // ms
+  lastGazeTime = newGazeTime;
+  tdiff = tdiff / 1000.0; // s
+  
   // need to do those calculations every time to react to resizing
   let eyeGazeAppRect = document.getElementById("app-container").getBoundingClientRect();
   let eyeGazePdfUpperRect = document.getElementById("upper-pdf").getBoundingClientRect();
@@ -306,14 +315,9 @@ const GAZE_SWITCH_THRESHOLD = 0.8; // config parameter
 const GAZE_REFERENCE_FREQUENCY = 6; // Hz, not meant to be changed
 
 var recentAverageGaze = 1;
-var lastGazeTime = new Date().getTime();
 
 function averageGaze(current){
-  if(autoTurn == AUTOTURNON){
-    let newGazeTime = new Date().getTime();
-    let tdiff = newGazeTime - lastGazeTime; // ms
-    lastGazeTime = newGazeTime;
-    tdiff = tdiff / 1000.0; // s
+  if(autoTurn == AUTOTURNON && isCalibrated){
     let trel = tdiff / (1.0 / GAZE_REFERENCE_FREQUENCY); // fraction of reference period that passed since last time
     let oldDataWeight = Math.pow(1-GAZE_AVERAGING_FACTOR, trel);
     recentAverageGaze = recentAverageGaze * oldDataWeight + current * (1-oldDataWeight);

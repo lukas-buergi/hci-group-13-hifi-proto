@@ -85,9 +85,11 @@ class Model():
         m = self.measurements[-1]
         if(len(self.simulation) == 0):
             sm = SimulatedMeasurement([m.time, m.pageUpper, m.pageLower])
+            m2 = m
         else:
             sm = self.simulation[-1]
-        tdiff = m.time - self.lastGazeTime # ms
+            m2 = self.measurements[-2]
+        tdiff = m.time - m2.time # ms
         self.lastGazeTime = m.time
         tdiff = tdiff / 1000.0 # s
         trel = tdiff / (1.0 / self.GAZE_REFERENCE_FREQUENCY) # fraction of reference period that passed since last time
@@ -287,17 +289,20 @@ if __name__ == "__main__":
     if(False):
        randomSearch(measurementFiles[0:3])
 
-    if(True):
+    if(False):
         randomizedNelderMead(measurementFiles[0:3])
 
-    if(False):
-        opt = Optimization(measurementFiles[0:3])
-        params = [0.045, 0.9, 0.3, 10] # pretty good
-        #params = [0.2931978195602054, 0.436936186829908, 0.5129171007824062, 1000000]
-        #params = [0.01318708432625526, 0.8988984044776684, 0.008015402940925398, 1000000]
-        #params = [0.01318708432625526, 0.8988984044776684, 0.008015402940925398, 1000000]
-        #params = [0.9, 0.1, 0, 1000000]
-        print("Example: cost(" + str(params) + ") = " + str(opt.cost(params)), "(reset cost:", weight['resetThreshold'] / params[3], ")")
+    if(True):
+        opt = Optimization(measurementFiles[-1:])
+        params = [  [0.045, 0.9, 0.3, 10],
+                    [0.2931978195602054, 0.436936186829908, 0.5129171007824062, 1000000],
+                    [0.01318708432625526, 0.8988984044776684, 0.008015402940925398, 1000000],
+                    [0.01318708432625526, 0.8988984044776684, 0.008015402940925398, 1000000],
+                    [0.9, 0.1, 0, 1000000],
+                    [0.2, 0.8 , 0.05, 10]
+                ]
+        for p in params:
+            print("Example: cost(" + str(p) + ") = " + str(opt.cost(p)), "(reset cost:", weight['resetThreshold'] / p[3], ")")
     
     if(False):
         opt = Optimization(measurementFiles[0:3])
