@@ -1,5 +1,6 @@
 #!/usr/bin/env python3
 import math
+import sys
 import csv
 import randomsearch as rs
 import random
@@ -153,7 +154,9 @@ class Optimization():
         self.measurementFiles = files
         
     def cost(self, x):
-        assert ( 0 <= x[0] and x[0] <= 1 and 0 <= x[1] and x[1] <= 1 and 0 <= x[2] and x[2] < 0.5 and 1 < x[3] ), "Parameter out of bounds: " + str(x)
+        if(not (0 <= x[0] and x[0] <= 1 and 0 <= x[1] and x[1] <= 1 and 0 <= x[2] and x[2] < 0.5 and 1 < x[3])):
+            print("Parameter out of bounds: ", str(x), " returning arbitrary large number.", file=sys.stderr)
+            return(1000000)
         gazeAveragingFactor = x[0]
         gazeSwitchThreshold = x[1]
         gazeBorder = x[2]
@@ -277,10 +280,24 @@ def nelderMead(func, initialValue):
     res = minimize(func, initialValue, method='Nelder-Mead', options={'disp' : True, 'maxiter' : 1000, 'return_all' : True})
     return(func(res.x))
 
+def powell(func, initialValue):
+    res = minimize(func, initialValue, method='Powell', bounds=[(0,1),(0,1),(0,0.5),(1,1000001)], options={'disp' : True, 'return_all' : True})
+    return(func(res.x))
+
 def randomizedNelderMead(files):
-    opt = Optimization(measurementFiles[0:3])
+    opt = Optimization(files)
     f = lambda params : nelderMead(opt.cost, params)
     a,b = rs.optimize(f, 4, [0, 0, 0 , 5], [1, 1, 0.5, 30], 10)
+    print("Best achieved cost: ", a)
+    print("avg factor: ", b[0])
+    print("switch: ", b[1])
+    print("border: ", b[2])
+    print("reset: ", b[3], "(reset cost:", weight['resetThreshold'] / b[3], ")")
+    
+def randomizedPowell(files):
+    opt = Optimization(files)
+    f = lambda params : powell(opt.cost, params)
+    a,b = rs.optimize(f, 4, [0, 0, 0 , 1000000], [1, 1, 0.5, 1000000], 10)
     print("Best achieved cost: ", a)
     print("avg factor: ", b[0])
     print("switch: ", b[1])
@@ -300,20 +317,26 @@ if __name__ == "__main__":
 
     if(False):
         randomizedNelderMead(measurementFiles[0:3])
-
+        
+    if(True):
+        randomizedPowell(measurementFiles[0:3])
+        
     if(False):
+        # example values
         opt = Optimization(measurementFiles[-1:])
         for p in params:
             print("Example: cost(" + str(p) + ") = " + str(opt.cost(p)), "(reset cost:", weight['resetThreshold'] / p[3], ")")
     
-    if(True):
+    if(False):
+        # Powell with example values
         opt = Optimization(measurementFiles[0:3])
         for p in params:
             r = minimize(opt.cost, p, method='Powell', bounds=[(0,1),(0,1),(0,0.5),(1,1000001)], options={'disp' : True, 'return_all' : True})
             # 'direc': [[0.1,0,0,0],[0,0.1,0,0],[0,0,0.1,0],[0,0,0,0.1]], 
-            print("Example: cost(" + str(p) + ") = ", str(r.x), "(reset cost:", weight['resetThreshold'] / r.x[3], ")")
+            print("Example: ", str(p), "->", str(r.x), "cost(" + str(r.x) + ") = ", opt.cost(r.x), "(reset cost:", weight['resetThreshold'] / r.x[3], ")")
     
     if(False):
+        # Nelder-Mead with fixed iv
         opt = Optimization(measurementFiles[0:3])
         params = [0.045, 0.9, 0.3, 10] # pretty good
         res = minimize(opt.cost, params, method='Nelder-Mead', options={'disp':True, 'maxiter':1000, 'return_all':True})
@@ -324,8 +347,10 @@ if __name__ == "__main__":
 
 
     if(False):
+        # something with plots
         opt = Optimization(measurementFiles[0:3])
         a,b,c = optimize(opt.cost, 4,[0,0,0,1],[1,1,1,30],1000)
 
     if(False):
+        # plot cost over first two arguments
         plotCost(measurementFiles[0:3])
