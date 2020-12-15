@@ -10,6 +10,7 @@ import matplotlib.pyplot as plt
 from matplotlib import cm
 from matplotlib.ticker import LinearLocator, FormatStrFormatter
 from scipy.optimize import minimize
+from multiprocessing import Pool
 
 # constant weights of the different cost summands
 weight = {
@@ -244,11 +245,19 @@ def randomSearch(files):
     print("switch: ", b[1])
     print("border: ", b[2])
     print("reset: ", b[3], "(reset cost:", weight['resetThreshold'] / b[3], ")")
-    
-def plotCost(files):
-    opt = Optimization(files)
+
+def plotCostHelper(v):
+    opt = Optimization(measurementFiles[0:3])
+    x = v[0]
+    y = v[1]
+    return(opt.cost([x, y, 0.30796802554860314, 1000000]))
+
+def plotCost():
     def f(xs, ys):
-        return([opt.cost([x, y, 0.30796802554860314, 1000000]) for x, y in zip(xs, ys)])
+        #return([opt.cost([x, y, 0.30796802554860314, 1000000]) for x, y in zip(xs, ys)])
+        pool = Pool()
+        result = pool.map(plotCostHelper, zip(xs, ys))
+        return(result)
         
     fig = plt.figure()
     ax = fig.gca(projection='3d')
@@ -257,8 +266,8 @@ def plotCost(files):
     ax.set_zlabel('Cost')
     
     # Make data.
-    X = np.arange(0.011, 0.013, 0.0001)
-    Y = np.arange(0.595, 0.605, 0.0005)
+    X = np.arange(0, 1, 0.2)
+    Y = np.arange(0, 1, 0.2)
     X, Y = np.meshgrid(X, Y)
     
     zs = np.array(f(np.ravel(X), np.ravel(Y)))
@@ -318,7 +327,7 @@ if __name__ == "__main__":
     if(False):
         randomizedNelderMead(measurementFiles[0:3])
         
-    if(True):
+    if(False):
         randomizedPowell(measurementFiles[0:3])
         
     if(False):
@@ -351,6 +360,6 @@ if __name__ == "__main__":
         opt = Optimization(measurementFiles[0:3])
         a,b,c = optimize(opt.cost, 4,[0,0,0,1],[1,1,1,30],1000)
 
-    if(False):
-        # plot cost over first two arguments
-        plotCost(measurementFiles[0:3])
+    if(True):
+        # plot cost over first two arguments, using hard coded files
+        plotCost()
