@@ -1,5 +1,6 @@
 #!/usr/bin/env python3
 import math
+import pickle
 import sys
 import csv
 import randomsearch as rs
@@ -250,7 +251,7 @@ def plotCostHelper(v):
     opt = Optimization(measurementFiles[0:3])
     x = v[0]
     y = v[1]
-    return(opt.cost([x, y, 0.30796802554860314, 1000000]))
+    return(opt.cost([x, y, 0.30, 1000000]))
 
 def plotCost():
     def f(xs, ys):
@@ -266,13 +267,13 @@ def plotCost():
     ax.set_zlabel('Cost')
     
     # Make data.
-    X = np.arange(0, 1, 0.2)
-    Y = np.arange(0, 1, 0.2)
+    X = np.arange(0.05, 0.3, 0.001)
+    Y = np.arange(0.50, 0.70, 0.001)
     X, Y = np.meshgrid(X, Y)
     
     zs = np.array(f(np.ravel(X), np.ravel(Y)))
     Z = zs.reshape(X.shape)
-
+	
     # Plot the surface.
     surf = ax.plot_surface(X, Y, Z, cmap=cm.coolwarm,
                            linewidth=0, antialiased=False)
@@ -282,6 +283,9 @@ def plotCost():
 
     # Add a color bar which maps values to colors.
     fig.colorbar(surf, shrink=0.5, aspect=5)
+
+	# Save the data
+    pickle.dump(fig, open("plot-border0.3-avg0.05-0.3-switch0.5-0.7.pickle", "wb"))
 
     plt.show()
     
