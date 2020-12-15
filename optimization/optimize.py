@@ -208,22 +208,25 @@ def optimize(function, dimensions, lower_boundary, upper_boundary, max_iter, max
 
     for _ in range(max_iter):
 
-        solution1 = function(best_solution)
-        plot_data = np.append(plot_data,solution1)
-
         new_solution = [lower_boundary[d] + random.random() * (upper_boundary[d] - lower_boundary[d]) for d in
                         range(dimensions)]
+        try:
+            solution1 = function(best_solution)
+            plot_data = np.append(plot_data,solution1)
 
-        if np.greater_equal(new_solution, lower_boundary).all() and np.less_equal(new_solution, upper_boundary).all():
-            solution2 = function(new_solution)
-        elif maximize:
-            solution2 = -100000.0
-        else:
-            solution2 = 100000.0
 
-        if solution2 > solution1 and maximize:
-            best_solution = new_solution
-        elif solution2 < solution1 and not maximize:
+            if np.greater_equal(new_solution, lower_boundary).all() and np.less_equal(new_solution, upper_boundary).all():
+                solution2 = function(new_solution)
+            elif maximize:
+                solution2 = -100000.0
+            else:
+                solution2 = 100000.0
+
+            if solution2 > solution1 and maximize:
+                best_solution = new_solution
+            elif solution2 < solution1 and not maximize:
+                best_solution = new_solution
+        except:
             best_solution = new_solution
 
     best_fitness = function(best_solution)
