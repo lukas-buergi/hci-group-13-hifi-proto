@@ -290,7 +290,12 @@ def randomizedNelderMead(files):
 if __name__ == "__main__":
     measurementFiles = ['flurinGatheredDataPage1-11endedAt21_07_24.csv', 'lukasJustReadingGatheredDataPage1-4endedAt18_08_42.csv', 'lukasJustReadingGatheredDataPage7-12endedAt18_14_56.csv', 'exampleData.csv', 'perfectArtificalTestData.csv']
 
-    if(True):
+    params = [  [0.9, 0.1, 0, 1000000], # good for the artificial example
+                [0.2, 0.8 , 0.05, 1000000], # values in prototype so far
+                [0.045, 0.9, 0.3, 10], # old opt output
+            ]
+
+    if(False):
        randomSearch(measurementFiles[0:3])
 
     if(False):
@@ -298,15 +303,15 @@ if __name__ == "__main__":
 
     if(False):
         opt = Optimization(measurementFiles[-1:])
-        params = [  [0.045, 0.9, 0.3, 10],
-                    [0.2931978195602054, 0.436936186829908, 0.5129171007824062, 1000000],
-                    [0.01318708432625526, 0.8988984044776684, 0.008015402940925398, 1000000],
-                    [0.01318708432625526, 0.8988984044776684, 0.008015402940925398, 1000000],
-                    [0.9, 0.1, 0, 1000000],
-                    [0.2, 0.8 , 0.05, 10]
-                ]
         for p in params:
             print("Example: cost(" + str(p) + ") = " + str(opt.cost(p)), "(reset cost:", weight['resetThreshold'] / p[3], ")")
+    
+    if(True):
+        opt = Optimization(measurementFiles[0:3])
+        for p in params:
+            r = minimize(opt.cost, p, method='Powell', bounds=[(0,1),(0,1),(0,0.5),(1,1000001)], options={'disp' : True, 'return_all' : True})
+            # 'direc': [[0.1,0,0,0],[0,0.1,0,0],[0,0,0.1,0],[0,0,0,0.1]], 
+            print("Example: cost(" + str(p) + ") = ", str(r.x), "(reset cost:", weight['resetThreshold'] / r.x[3], ")")
     
     if(False):
         opt = Optimization(measurementFiles[0:3])
