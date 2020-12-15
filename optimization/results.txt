@@ -1,136 +1,61 @@
 * For perfectArtificalTestData.csv the best solution should have cost basically 0.
-* For flurinGatheredDataPage1-11endedAt21_07_24.csv the best solution encountered so far is:
-    Best achieved cost:  0.6759374523189957
-    avg factor:  0.07618552549301894
-    switch:  0.7609671012429418
-    border:  0.12389962085725292
-    reset:  47.919274469910164 (reset cost: 0.20868429479831285 )
 * For
   'flurinGatheredDataPage1-11endedAt21_07_24.csv',
   'lukasJustReadingGatheredDataPage1-4endedAt18_08_42.csv',
   'lukasJustReadingGatheredDataPage7-12endedAt18_14_56.csv'
-  together, the best so far (145000 iterations) is:
-    Best achieved cost:  0.3286520431643349
-    avg factor:  0.04962038786094802
-    switch:  0.7447815220981716
-    border:  0.005308761868076106
-    reset:  1000000.0 (reset cost: 1e-05 )
-  others are:
-    Best achieved cost:  0.36046778347082165
-    avg factor:  0.07654682772760579
-    switch:  0.9481944704125063
-    border:  0.2963394875076432
-    reset:  1000000.0 (reset cost: 1e-05 )
-    
-    Best achieved cost:  0.3949230615217663
-    avg factor:  0.009611823194181635
-    switch:  0.6186727797744753
-    border:  0.3877859487124352
-    reset:  1000000.0 (reset cost: 1e-05 )
-
-    Best achieved cost:  0.3362826628692937
-    avg factor:  0.031033965884849857
-    switch:  0.6972694047353947
-    border:  0.0969829031355115
-    reset:  1000000.0 (reset cost: 1e-05 )
-	Best achieved cost:  0.33750598034833573
-	avg factor:  0.03230820048268623
-	switch:  0.7124381757057034
-	border:  0.10292638248144753
-	reset:  1000000.0 (reset cost: 1e-05 )
-	Best achieved cost:  0.3648267969277641
-	avg factor:  0.020729992828254162
-	switch:  0.7616877124752539
-	border:  0.36648157701549483
-	reset:  1000000.0 (reset cost: 1e-05 )
-	Best achieved cost:  0.3667598799485687
-	avg factor:  0.04695543234228061
-	switch:  0.8785790047083784
-	border:  0.3088350747451514
-	reset:  1000000.0 (reset cost: 1e-05 )
-	Best achieved cost:  0.3597321864029778
-	avg factor:  0.02369267784946627
-	switch:  0.8226306644371817
-	border:  0.3858772353729647
-	reset:  1000000.0 (reset cost: 1e-05 )
-	Best achieved cost:  0.34618180624218425
-	avg factor:  0.051250141407719885
-	switch:  0.9754954716010028
-	border:  0.48605637682691855
-	reset:  1000000.0 (reset cost: 1e-05 )
-	Best achieved cost:  0.3319876565754449
-	avg factor:  0.011337315030587436
-	switch:  0.6099209757427824
-	border:  0.3923762851802386
-	reset:  1000000.0 (reset cost: 1e-05 )
-	Best achieved cost:  0.383877714146728
-	avg factor:  0.0207611212603932
-	switch:  0.863646554018595
-	border:  0.48789387827335784
-	reset:  1000000.0 (reset cost: 1e-05 )
-	Best achieved cost:  0.36671076551167414
-	avg factor:  0.03865979460098845
-	switch:  0.8408890541152674
-	border:  0.3123071935892535
-	reset:  1000000.0 (reset cost: 1e-05 )
-	Best achieved cost:  0.35531866949783014
-	avg factor:  0.01915003765658052
-	switch:  0.7668497410987156
-	border:  0.39632768955596
-	reset:  1000000.0 (reset cost: 1e-05 )
-	Best achieved cost:  0.38082074537176275
-	avg factor:  0.02109405425668165
-	switch:  0.6352481650297916
-	border:  0.08966916385041096
-	reset:  1000000.0 (reset cost: 1e-05 )
-And here some with reset not disabled:
-Best achieved cost:  0.4955645459656465
-avg factor:  0.024822256491215944
-switch:  0.6071606374447542
-border:  0.1841989420824488
-reset:  29.931657836269064 (reset cost: 0.16704721226437896 )
-Best achieved cost:  0.4759054779257703
-avg factor:  0.0802319372529594
-switch:  0.9657077978695617
-border:  0.36873808433284005
-reset:  24.412529644123865 (reset cost: 0.2048128593344487 )
-Best achieved cost:  0.45256007672809173
-avg factor:  0.02980329862688702
-switch:  0.7604015143278403
-border:  0.3693440474842286
-reset:  27.25105819176365 (reset cost: 0.18347911353810098 )
-Best achieved cost:  0.4803190523132095
-avg factor:  0.06047144076483846
-switch:  0.8664657537292494
-border:  0.22600912305724624
-reset:  24.371281300556962 (reset cost: 0.20515950467839103 )
-Best achieved cost:  0.5084042676239463
-avg factor:  0.0756742574199295
-switch:  0.9040071579196369
-border:  0.2241444299866756
-reset:  24.48278498178603 (reset cost: 0.2042251322192206 )
-Best achieved cost:  0.43421654628415995
-avg factor:  0.022492153435671902
-switch:  0.6361683468969465
-border:  0.23690341305553442
-reset:  29.565767301770467 (reset cost: 0.16911450154383742 )
-Best achieved cost:  0.4842682315897444
-avg factor:  0.048406520719108004
-switch:  0.88947190431819
-border:  0.3900786773471927
-reset:  27.32576957152965 (reset cost: 0.1829774633395662 )
-Best achieved cost:  0.5038701616821051
-avg factor:  0.014160683725934375
-switch:  0.5847970079344873
-border:  0.45740779787624125
-reset:  29.009812963628338 (reset cost: 0.1723554717939359 )
-Best achieved cost:  0.4871879640100146
-avg factor:  0.029167690218397713
-switch:  0.756172676959119
-border:  0.36172958902063224
-reset:  25.661435339196828 (reset cost: 0.19484490769550594 )
-Best achieved cost:  0.47544366450795583
-avg factor:  0.02172896776373645
-switch:  0.6634308079429202
-border:  0.36858556956553407
-reset:  25.272257821536698 (reset cost: 0.19784540167752893 )
+  together, the best so far is:
+Best achieved cost:  0.4266253665839417
+avg factor:  0.6585803884493817
+switch:  0.7802960224955606
+border:  0.4631297676943137
+reset:  1000000.0 (reset cost: 5e-06 )
+Best achieved cost:  0.4135341599610531
+avg factor:  0.22172123053608495
+switch:  0.6240621489389259
+border:  0.3330504826656328
+reset:  1000000.0 (reset cost: 5e-06 )
+Best achieved cost:  0.4022466881780246
+avg factor:  0.1068527726989692
+switch:  0.594809431742456
+border:  0.15714339778991798
+reset:  1000000.0 (reset cost: 5e-06 )
+Best achieved cost:  0.41442588353476745
+avg factor:  0.21722463510436418
+switch:  0.6404189989511904
+border:  0.327867777059385
+reset:  1000000.0 (reset cost: 5e-06 )
+Best achieved cost:  0.4139492507910222
+avg factor:  0.20762340483638841
+switch:  0.627884757595718
+border:  0.33348942253804537
+reset:  1000000.0 (reset cost: 5e-06 )
+Best achieved cost:  0.42626707176487194
+avg factor:  0.21206738902547273
+switch:  0.6069939091330508
+border:  0.333001512228753
+reset:  1000000.0 (reset cost: 5e-06 )
+Best achieved cost:  0.4187926797958901
+avg factor:  0.24618458421270517
+switch:  0.6749468303093175
+border:  0.32506852727858726
+reset:  1000000.0 (reset cost: 5e-06 )
+Best achieved cost:  0.4138914722530769
+avg factor:  0.23413709647707082
+switch:  0.6534482203145473
+border:  0.3290073754124814
+reset:  1000000.0 (reset cost: 5e-06 )
+Best achieved cost:  0.4288599305484953
+avg factor:  0.7501292764143254
+switch:  0.853015793765961
+border:  0.46551242147220256
+reset:  1000000.0 (reset cost: 5e-06 )
+Best achieved cost:  0.43162046797259834
+avg factor:  0.17528708242734703
+switch:  0.5873350096254888
+border:  0.32887146560453284
+reset:  1000000.0 (reset cost: 5e-06 )
+Best achieved cost:  0.43067609286512015
+avg factor:  0.6068142230602542
+switch:  0.7309482265499877
+border:  0.46687013743506395
+reset:  1000000.0 (reset cost: 5e-06 )
