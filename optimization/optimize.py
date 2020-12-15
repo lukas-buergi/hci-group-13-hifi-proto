@@ -267,8 +267,8 @@ def plotCost():
     ax.set_zlabel('Cost')
     
     # Make data.
-    X = np.arange(0.05, 0.3, 0.001)
-    Y = np.arange(0.50, 0.70, 0.001)
+    X = np.arange(0.05, 0.3, 0.01)
+    Y = np.arange(0.50, 0.70, 0.1)
     X, Y = np.meshgrid(X, Y)
     
     zs = np.array(f(np.ravel(X), np.ravel(Y)))
@@ -285,7 +285,7 @@ def plotCost():
     fig.colorbar(surf, shrink=0.5, aspect=5)
 
 	# Save the data
-    pickle.dump(fig, open("plot-border0.3-avg0.05-0.3-switch0.5-0.7.pickle", "wb"))
+    pickle.dump(fig, open("test.pickle", "wb"))
 
     plt.show()
     
