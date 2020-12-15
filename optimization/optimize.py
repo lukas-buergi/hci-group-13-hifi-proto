@@ -153,6 +153,7 @@ class Optimization():
         self.measurementFiles = files
         
     def cost(self, x):
+        assert ( 0 <= x[0] and x[0] <= 1 and 0 <= x[1] and x[1] <= 1 and 0 <= x[2] and x[2] < 0.5 and 1 < x[3] ), "Parameter out of bounds: " + str(x)
         gazeAveragingFactor = x[0]
         gazeSwitchThreshold = x[1]
         gazeBorder = x[2]
@@ -231,7 +232,7 @@ def optimize(function, dimensions, lower_boundary, upper_boundary, max_iter, max
 
 def randomSearch(files): 
     opt = Optimization(files)
-    a,b = rs.optimize(opt.cost, 4, [0, 0, 0 , 5], [1, 1, 0.5, 30], 10000)
+    a,b = rs.optimize(opt.cost, 4, [0, 0, 0 , 1000000], [1, 1, 0.5, 1000000], 100)
     print("Best achieved cost: ", a)
     print("avg factor: ", b[0])
     print("switch: ", b[1])
@@ -286,13 +287,13 @@ def randomizedNelderMead(files):
 if __name__ == "__main__":
     measurementFiles = ['flurinGatheredDataPage1-11endedAt21_07_24.csv', 'lukasJustReadingGatheredDataPage1-4endedAt18_08_42.csv', 'lukasJustReadingGatheredDataPage7-12endedAt18_14_56.csv', 'exampleData.csv', 'perfectArtificalTestData.csv']
 
-    if(False):
+    if(True):
        randomSearch(measurementFiles[0:3])
 
     if(False):
         randomizedNelderMead(measurementFiles[0:3])
 
-    if(True):
+    if(False):
         opt = Optimization(measurementFiles[-1:])
         params = [  [0.045, 0.9, 0.3, 10],
                     [0.2931978195602054, 0.436936186829908, 0.5129171007824062, 1000000],
