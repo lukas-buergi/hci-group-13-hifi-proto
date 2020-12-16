@@ -251,7 +251,7 @@ def plotCostHelper(v):
     opt = Optimization(measurementFiles[0:3])
     x = v[0]
     y = v[1]
-    return(opt.cost([x, y, 0.30, 1000000]))
+    return(opt.cost([x, y, 0.15, 1000000]))
 
 def plotCost():
     def f(xs, ys):
@@ -267,8 +267,8 @@ def plotCost():
     ax.set_zlabel('Cost')
     
     # Make data.
-    X = np.arange(0.15, 0.45, 0.001)
-    Y = np.arange(0.60, 0.90, 0.001)
+    X = np.arange(0, 1, 0.001)
+    Y = np.arange(0, 1, 0.001)
     X, Y = np.meshgrid(X, Y)
     
     zs = np.array(f(np.ravel(X), np.ravel(Y)))
